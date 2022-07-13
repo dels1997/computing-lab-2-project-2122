@@ -1,13 +1,13 @@
 <?php
 
-require_once __DIR__ . '/../model/libraryservice.class.php';
+require_once __DIR__ . '/../model/teamupservice.class.php';
 
 class usersController
 {
     public function index()
     {
-        $userlist = LibraryService::getAllUsers();
-        $title = 'Popis svih korisnika';
+        $users = TeamUpService::getAllUsers();
+        $admins = TeamUpService::getAllAdmins();
 
         require_once __DIR__ . '/../view/users_index.php';
     }

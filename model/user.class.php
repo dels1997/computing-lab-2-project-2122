@@ -1,9 +1,9 @@
 <?php
 class User
 {
-    protected $id, $username, $password_hash, $email, $registration_sequence, $has_registered;
+    protected $id, $username, $password_hash, $email, $registration_sequence, $has_registered, $admin;
 
-    function __construct($id, $username, $password_hash, $email, $registration_sequence, $has_registered)
+    function __construct($id, $username, $password_hash, $email, $registration_sequence, $has_registered, $admin)
     {
         $this->id = $id;
         $this->username = $username;
@@ -11,6 +11,7 @@ class User
         $this->email = $email;
         $this->registration_sequence = $registration_sequence;
         $this->has_registered = $has_registered;
+        $this->admin = $admin;
     }
 
     function __get($property)

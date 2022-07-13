@@ -1,16 +1,14 @@
 <?php
-class Project
+class Table
 {
-    protected $id, $id_user, $title, $abstract, $number_available, $status;
+    protected $id, $id_user, $o2_table, $co2_table;
 
-    function __construct($id, $id_user, $title, $abstract, $number_available, $status)
+    function __construct($id, $id_user, $o2_table, $co2_table)
     {
         $this->id = $id;
         $this->id_user = $id_user;
-        $this->title = $title;
-        $this->abstract = $abstract;
-        $this->number_available = $number_available;
-        $this->status = $status;
+        $this->o2_table = $o2_table;
+        $this->co2_table = $co2_table;
     }
 
     function __get($property)

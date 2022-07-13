@@ -6,9 +6,13 @@ class TablesController
 {
     public function index()
     {
-        $projectlist = TeamUpService::getAllProjects();
+        $user = TeamUpService::getUserByName($_SESSION['username']);
+        
+        $o2_trainings = TeamUpService::getMyO2Trainings($user);
 
-        $title = 'List of my tables';
+        $co2_trainings = TeamUpService::getMyCO2Trainings($user);
+
+        $title = '';
 
         require_once __DIR__ . '/../view/tables_index.php';
     }
@@ -17,9 +21,26 @@ class TablesController
     {
         $projectlist = null;
 
+        $user = TeamUpService::getUserByName($_SESSION['username']);
+
+        $tables = TeamUpService::getMyTables($user);
+
         $title = '';
 
         require_once __DIR__ . '/../view/tables_start.php';
+    }
+    
+    public function edit()
+    {
+        $projectlist = null;
+
+        $user = TeamUpService::getUserByName($_SESSION['username']);
+
+        $tables = null;
+
+        $title = '';
+
+        require_once __DIR__ . '/../view/tables_edit.php';
     }
 
     public function owned()

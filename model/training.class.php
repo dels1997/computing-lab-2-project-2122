@@ -1,16 +1,15 @@
 <?php
-class Project
+class Training
 {
-    protected $id, $id_user, $title, $abstract, $number_available, $status;
+    protected $id, $id_user, $type, $duration, $date;
 
-    function __construct($id, $id_user, $title, $abstract, $number_available, $status)
+    function __construct($id, $id_user, $type, $duration, $date)
     {
         $this->id = $id;
         $this->id_user = $id_user;
-        $this->title = $title;
-        $this->abstract = $abstract;
-        $this->number_available = $number_available;
-        $this->status = $status;
+        $this->type = $type;
+        $this->duration = $duration;
+        $this->date = $date;
     }
 
     function __get($property)

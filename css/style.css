@@ -6,8 +6,15 @@ form {
     background-color: black;
     color: white;
     --text-color: #afafaf;
-    max-width: 500px;
+    max-width: 700px;
     margin: 0 auto;
+}
+
+.custom-form {
+    background-color: black;
+    color: white;
+    --text-color: #afafaf;
+    max-width: 500px;
 }
 
 .field {
@@ -19,6 +26,11 @@ form {
 }
 
 .label1 {
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.label-custom {
     color: var(--text-color);
     font-size: 1.2rem;
 }
@@ -73,7 +85,19 @@ form {
 .field:focus-within .label1 {
     transform: scale(0.8) translateY(-5rem);
     opacity: 1;
-  }
+}
+
+.label-custom {
+    position: absolute;
+    transform: translateY(-2rem);
+    transform-origin: 0%;
+    transition: transform 400ms;
+}
+
+.field:focus-within .label-custom {
+    transform: scale(0.8) translateY(-5rem);
+    opacity: 1;
+}
 
 
 /* input, button, select, textarea {
@@ -329,9 +353,9 @@ input[type="submit"]:hover{
 .styled-table td {
     padding: 12px 15px;
 }
-/*bolje thin umisto 1px*/
+
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+    border-bottom: thin solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
@@ -345,4 +369,37 @@ input[type="submit"]:hover{
 .styled-table tbody tr.active-row {
     font-weight: bold;
     color: #009879;
+}
+
+#notification {
+    position:fixed;
+    top:0px;
+    width:100%;
+    z-index:105;
+    text-align:center;
+    font-weight:normal;
+    font-size:14px;
+    font-weight:bold;
+    color:white;
+    background-color:#5BA221;
+    padding:5px;
+}
+
+#notification span.dismiss {
+    border:2px solid #FFF;
+    padding:0 5px;
+    cursor:pointer;
+    float:right;
+    margin-right:10px;
+}
+
+#notification a {
+    color:white;
+    text-decoration:none;
+    font-weight:bold
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none;
 }
