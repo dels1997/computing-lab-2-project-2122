@@ -632,6 +632,44 @@ class FreeDivingService
         $st->execute(['id_user' => $user->id, 'o2_table' => $default_table, 'co2_table' => $default_table]);
     }
 
+    public static function convertTimesToDuration($times)
+    {
+        $duration = 0;
+        while(strlen($times) >= 4)
+        {
+            $time_string = substr($times, 0, 4);
+            $time_array = explode(':', $time_string);
+            $duration = $duration + 60 * (int)$time_array[0] + (int)$time_array[1];
+
+            $times = substr($times, 4);
+        }
+        return $duration;
+    }
+
+    public static function addO2Training($user, $duration)
+    {
+        $db = DB::getConnection();
+        $st = $db->prepare('INSERT INTO trainings (id_user, type, duration, date) VALUES
+            (:id_user, :type, :duration, CURDATE())');
+        return $st->execute(['id_user' => $user->id, 'type' => 'o', 'duration' => $duration]);
+    }
+
+    public static function addCO2Training($user, $duration)
+    {
+        $db = DB::getConnection();
+        $st = $db->prepare('INSERT INTO trainings (id_user, type, duration, date) VALUES
+            (:id_user, :type, :duration, CURDATE())');
+        return $st->execute(['id_user' => $user->id, 'type' => 'c', 'duration' => $duration]);
+    }
+
+    public static function addOneBreathTraining($user, $duration)
+    {
+        // $db = DB::getConnection();
+        // $st = $db->prepare('INSERT INTO users (username, password_hash, email, registration_sequence, has_registered, admin) VALUES
+        //     (:username, :password_hash, :email, :registration_sequence, :has_registered, :admin)');
+        // $st->execute(['username' => $user->username, 'password_hash' => $user->password_hash, 'email' => $user->email, 'registration_sequence' => $user->registration_sequence, 'has_registered' => $user->has_registered, 'admin' => $user->admin]);
+    }
+
     public static function processLoginOrRegister()
     {
         // echo 'u processloginorregister smo prije return</br>';
@@ -672,7 +710,6 @@ class FreeDivingService
             }
             else
             {
-                
                 // Postoji user. Dohvati hash njegovog passworda.
                 $hash = $row[ 'password_hash'];
                 $id_user = $row['id'];

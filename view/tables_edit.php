@@ -3,17 +3,17 @@
 <?php    
     echo '<div class="custom-form">';
 
-    echo '<div class="field"><label for="o2-breathe" class="label-custom">O2 breathe</label>';
-    echo '<input type="number" id="o2-breathe" class="input1" name="o2-breathe" min="1" max="599" required></div>';
-
     echo '<div class="field"><label for="o2-hold" class="label-custom">O2 hold</label>';
     echo '<input type="number" id="o2-hold" class="input1" name="o2-hold" min="1" max="599" required></div>';
 
-    echo '<div class="field"><label for="co2-breathe" class="label-custom">CO2 breathe</label>';
-    echo '<input type="number" id="co2-breathe" class="input1" name="co2-breathe" min="1" max="599" required></div>';
-
+    echo '<div class="field"><label for="o2-breathe" class="label-custom">O2 breathe</label>';
+    echo '<input type="number" id="o2-breathe" class="input1" name="o2-breathe" min="1" max="599" required></div>';
+    
     echo '<div class="field"><label for="co2-hold" class="label-custom">CO2 hold</label>';
-    echo '<input type="number" id="co2-hold" class="input1" name="co2-hold" min="1" max="599" required></div></br></br>';
+    echo '<input type="number" id="co2-hold" class="input1" name="co2-hold" min="1" max="599" required></div>';
+    
+    echo '<div class="field"><label for="co2-breathe" class="label-custom">CO2 breathe</label>';
+    echo '<input type="number" id="co2-breathe" class="input1" name="co2-breathe" min="1" max="599" required></div></br></br>';
 
     echo '<button id="edit" class="btn btn-white btn-big" name="edit">Edit my tables!</button>';
 

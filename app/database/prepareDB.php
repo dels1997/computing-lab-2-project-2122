@@ -173,23 +173,23 @@ try
 {
 	$st = $db->prepare( 'INSERT INTO trainings(id, id_user, type, duration, date) VALUES (:id, :id_user, :type, :duration, :date)' );
 
-	$st->execute( array( 'id' => 1, 'id_user' => 1, 'type' => 'o', 'duration' => 6, 'date' => '2022-01-05' ) ); // mirko
-	$st->execute( array( 'id' => 2, 'id_user' => 1, 'type' => 'o', 'duration' => 6, 'date' => '2022-01-07'  ) ); // mirko
-	$st->execute( array( 'id' => 3, 'id_user' => 1, 'type' => 'o', 'duration' => 12, 'date' => '2022-01-09'  ) ); // mirko
-	$st->execute( array( 'id' => 4, 'id_user' => 1, 'type' => 'o', 'duration' => 15, 'date' => '2022-01-11'  ) ); // mirko
-	$st->execute( array( 'id' => 5, 'id_user' => 1, 'type' => 'o', 'duration' => 15, 'date' => '2022-01-12'  ) ); // mirko
+	$st->execute( array( 'id' => 1, 'id_user' => 1, 'type' => 'o', 'duration' => 360, 'date' => '2022-01-05' ) ); // mirko
+	$st->execute( array( 'id' => 2, 'id_user' => 1, 'type' => 'o', 'duration' => 360, 'date' => '2022-01-07'  ) ); // mirko
+	$st->execute( array( 'id' => 3, 'id_user' => 1, 'type' => 'o', 'duration' => 720, 'date' => '2022-01-09'  ) ); // mirko
+	$st->execute( array( 'id' => 4, 'id_user' => 1, 'type' => 'o', 'duration' => 900, 'date' => '2022-01-11'  ) ); // mirko
+	$st->execute( array( 'id' => 5, 'id_user' => 1, 'type' => 'o', 'duration' => 900, 'date' => '2022-01-12'  ) ); // mirko
 	
-	$st->execute( array( 'id' => 6, 'id_user' => 1, 'type' => 'c', 'duration' => 6, 'date' => '2022-01-05' ) ); // mirko
-	$st->execute( array( 'id' => 7, 'id_user' => 1, 'type' => 'c', 'duration' => 15, 'date' => '2022-01-07'  ) ); // mirko
-	$st->execute( array( 'id' => 8, 'id_user' => 1, 'type' => 'c', 'duration' => 15, 'date' => '2022-01-09'  ) ); // mirko
-	$st->execute( array( 'id' => 9, 'id_user' => 1, 'type' => 'c', 'duration' => 21, 'date' => '2022-01-11'  ) ); // mirko
-	$st->execute( array( 'id' => 10, 'id_user' => 1, 'type' => 'c', 'duration' => 27, 'date' => '2022-01-12'  ) ); // mirko
+	$st->execute( array( 'id' => 6, 'id_user' => 1, 'type' => 'c', 'duration' => 360, 'date' => '2022-01-05' ) ); // mirko
+	$st->execute( array( 'id' => 7, 'id_user' => 1, 'type' => 'c', 'duration' => 900, 'date' => '2022-01-07'  ) ); // mirko
+	$st->execute( array( 'id' => 8, 'id_user' => 1, 'type' => 'c', 'duration' => 900, 'date' => '2022-01-09'  ) ); // mirko
+	$st->execute( array( 'id' => 9, 'id_user' => 1, 'type' => 'c', 'duration' => 1260, 'date' => '2022-01-11'  ) ); // mirko
+	$st->execute( array( 'id' => 10, 'id_user' => 1, 'type' => 'c', 'duration' => 1620, 'date' => '2022-01-12'  ) ); // mirko
 
-	$st->execute( array( 'id' => 11, 'id_user' => 2, 'type' => 'c', 'duration' => 6, 'date' => '2022-01-05' ) ); // ana
-	$st->execute( array( 'id' => 12, 'id_user' => 2, 'type' => 'c', 'duration' => 15, 'date' => '2022-01-07'  ) ); // ana
-	$st->execute( array( 'id' => 13, 'id_user' => 2, 'type' => 'c', 'duration' => 15, 'date' => '2022-01-09'  ) ); // ana
-	$st->execute( array( 'id' => 14, 'id_user' => 2, 'type' => 'c', 'duration' => 21, 'date' => '2022-01-11'  ) ); // ana
-	$st->execute( array( 'id' => 15, 'id_user' => 2, 'type' => 'c', 'duration' => 27, 'date' => '2022-01-12'  ) ); // ana
+	$st->execute( array( 'id' => 11, 'id_user' => 2, 'type' => 'c', 'duration' => 360, 'date' => '2022-01-05' ) ); // ana
+	$st->execute( array( 'id' => 12, 'id_user' => 2, 'type' => 'c', 'duration' => 900, 'date' => '2022-01-07'  ) ); // ana
+	$st->execute( array( 'id' => 13, 'id_user' => 2, 'type' => 'c', 'duration' => 900, 'date' => '2022-01-09'  ) ); // ana
+	$st->execute( array( 'id' => 14, 'id_user' => 2, 'type' => 'c', 'duration' => 1260, 'date' => '2022-01-11'  ) ); // ana
+	$st->execute( array( 'id' => 15, 'id_user' => 2, 'type' => 'c', 'duration' => 1620, 'date' => '2022-01-12'  ) ); // ana
 	
 	// $st->execute( array( 'id_project' => 1, 'id_user' => 1, 'type' => 'member' ) ); // autor (mirko) - go
 	// $st->execute( array( 'id_project' => 2, 'id_user' => 2, 'type' => 'member' ) ); // autor (ana) - fejsbuk
