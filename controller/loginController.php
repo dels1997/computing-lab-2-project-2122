@@ -14,13 +14,15 @@ class loginController
         {
             $user = FreeDivingService::getUserByName($_SESSION['username']);
         
-            $o2_trainings = FreeDivingService::getMyO2Trainings($user);
-    
-            $co2_trainings = FreeDivingService::getMyCO2Trainings($user);
-    
-            $title = $user->username;
-    
-            require_once __DIR__ . '/../view/tables_index.php';
+            $o2_trainings = FreeDivingService::getMyTrainings($user, 'o');
+
+            $co2_trainings = FreeDivingService::getMyTrainings($user, 'c');
+
+            $b_trainings = FreeDivingService::getMyTrainings($user, 'b');
+
+            $title = '';
+
+        require_once __DIR__ . '/../view/tables_index.php';
         }
         else
             require_once __DIR__ . '/../view/login_index.php';

@@ -191,6 +191,12 @@ try
 	$st->execute( array( 'id' => 14, 'id_user' => 2, 'type' => 'c', 'duration' => 1260, 'date' => '2022-01-11'  ) ); // ana
 	$st->execute( array( 'id' => 15, 'id_user' => 2, 'type' => 'c', 'duration' => 1620, 'date' => '2022-01-12'  ) ); // ana
 	
+	$st->execute( array( 'id' => 16, 'id_user' => 1, 'type' => 'b', 'duration' => 100, 'date' => '2022-01-05' ) ); // mirko
+	$st->execute( array( 'id' => 17, 'id_user' => 1, 'type' => 'b', 'duration' => 150, 'date' => '2022-01-07'  ) ); // mirko
+	$st->execute( array( 'id' => 18, 'id_user' => 1, 'type' => 'b', 'duration' => 200, 'date' => '2022-01-09'  ) ); // mirko
+	$st->execute( array( 'id' => 19, 'id_user' => 1, 'type' => 'b', 'duration' => 220, 'date' => '2022-01-11'  ) ); // mirko
+	$st->execute( array( 'id' => 20, 'id_user' => 1, 'type' => 'b', 'duration' => 450, 'date' => '2022-01-12'  ) ); // mirko
+	
 	// $st->execute( array( 'id_project' => 1, 'id_user' => 1, 'type' => 'member' ) ); // autor (mirko) - go
 	// $st->execute( array( 'id_project' => 2, 'id_user' => 2, 'type' => 'member' ) ); // autor (ana) - fejsbuk
 	// $st->execute( array( 'id_project' => 3, 'id_user' => 3, 'type' => 'member' ) ); // autor (maja) - recepti

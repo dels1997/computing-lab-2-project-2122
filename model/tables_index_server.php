@@ -34,11 +34,15 @@ $user = FreeDivingService::getUserByName($_GET['username']);
 
 if($training_type === 'o')
 {
-    $msg['trainings'] = FreeDivingService::getMyO2TrainingDatesAndDurations($user);
+    $msg['trainings'] = FreeDivingService::getMyTrainingDatesAndDurations($user, 'o');
 }
 else if($training_type === 'c')
 {
-    $msg['trainings'] = FreeDivingService::getMyCO2TrainingDatesAndDurations($user);
+    $msg['trainings'] = FreeDivingService::getMyTrainingDatesAndDurations($user, 'c');
+}
+else if($training_type === 'b')
+{
+    $msg['trainings'] = FreeDivingService::getMyTrainingDatesAndDurations($user, 'b');
 }
 
 send_JSON_and_exit($msg);

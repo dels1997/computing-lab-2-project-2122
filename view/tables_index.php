@@ -2,8 +2,9 @@
 
 <div class="okolina" style="width: 500px;">
     <div class="two-button-frame" style="float: left; display: block; width: max-content; margin-bottom: 0.5rem;">
-        <button name="o2-btn" id="o2-btn" class="btn btn-big btn-white">O2 table history</button>
-        <button name="co2-btn" id="co2-btn" class="btn btn-big btn-white">CO2 table history</button>
+        <button name="o2-btn" id="o2-btn" class="btn btn-big btn-white">O2 table history</button></br>
+        <button name="co2-btn" id="co2-btn" class="btn btn-big btn-white">CO2 table history</button></br>
+        <button name="b-btn" id="b-btn" class="btn btn-big btn-white">One breath history</button>
     </div>
 
     <div id="control-display" style="display: none; float: left; width: max-content; margin-bottom: 0.5rem;">
@@ -45,6 +46,24 @@
                 echo '<tr>';
                 echo '<td id="td-o' . $i . '">' . $co2_training->date . '</td>';
                 echo '<td id="td-o' . $i . '">' . $co2_training->duration . '</td>';
+                echo '</tr>';
+                ++$i;
+            }
+            echo '</table>';
+        }
+
+        if(count($b_trainings) === 0)
+            echo '<div id="b-table-history" style="display: none;">No trainings of this kind yet!</div>';
+        else {
+            echo '<table id="b-table-history" class="styled-table" style="display: none; height: 100%; width: 35%; float: left;">' .
+                '<thead><tr><th>Date</th><th>Duration</th></tr></thead>';
+
+            $i = 0;
+            foreach($b_trainings as $b_training)
+            {
+                echo '<tr>';
+                echo '<td id="td-b' . $i . '">' . $b_training->date . '</td>';
+                echo '<td id="td-b' . $i . '">' . $b_training->duration . '</td>';
                 echo '</tr>';
                 ++$i;
             }
@@ -167,6 +186,62 @@
                 });
             </script>
         </div>
+
+        <div id="b-graph-history" style="display: inline;">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+            <div class="container">
+                <canvas id="myChart3" width="400" height="400"></canvas>
+            </div>
+
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $.ajax(
+                    {
+                        url: "model/tables_index_server.php",
+                        data:
+                        {
+                            type: 'b',
+                            username: $('#u').html()
+                        },
+                        type: "GET",
+                        dataType: "json", // očekivani povratni tip podatka
+                        success: function( json ) {
+                            trainings = json['trainings'];
+                            if(trainings.length === 0)
+                            {
+                                $('#b-graph-history').html('No trainings of this kind yet!');
+                            }
+                            else
+                            {
+                                let dates = [];
+                                let durations = [];
+                                for(let i = 0; i < trainings.length; ++i)
+                                {
+                                    dates.push(trainings[i][0]);
+                                    durations.push(trainings[i][1]);
+                                }
+
+                                var ctx = document.getElementById ('myChart3').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: dates,
+                                        datasets: [{
+                                            label: 'Duration',
+                                            data: durations,
+                                            backgroundColor: "rgba(169, 223, 122, 0.4)"
+                                        }]
+                                    }
+                                });
+                            }
+                        },
+                        error: function( xhr, status, errorThrown ) { },
+                        complete: function( xhr, status ) {  }
+                    });
+                });
+            </script>
+        </div>
     </div>
 </div>
 
@@ -177,10 +252,13 @@ $(document).ready(function()
 {
     $('#o2-graph-history').css('visibility', 'hidden');
     $('#co2-graph-history').css('visibility', 'hidden');
+    $('#b-graph-history').css('visibility', 'hidden');
 
     $('#o2-btn').on('click', show_o2);
 
     $('#co2-btn').on('click', show_co2);
+
+    $('#b-btn').on('click', show_b);
 
     $('#btn-table-display').on('click', function() {
         data_type = 'table';
@@ -188,6 +266,8 @@ $(document).ready(function()
             show_o2();
         else if(training_type === 'c')
             show_co2();
+        else if(training_type === 'b')
+            show_b();
     });
 
     $('#btn-graph-display').on('click', function() {
@@ -196,6 +276,8 @@ $(document).ready(function()
             show_o2();
         else if(training_type === 'c')
             show_co2();
+        else if(training_type === 'b')
+            show_b();
     });
 });
 
@@ -207,10 +289,13 @@ function show_o2() {
     {
         $('#co2-table-history').css('display', 'none');
         $('#co2-graph-history').css('display', 'none');
+        $('#b-table-history').css('display', 'none');
+        $('#b-graph-history').css('display', 'none');
         $('#o2-graph-history').css('display', 'none');
         $('#control-graph').css('display', 'none');
         $('#o2-graph-history').css('visibility', 'visible');
         $('#co2-graph-history').css('visibility', 'visible');    
+        $('#b-graph-history').css('visibility', 'visible');    
 
         $('#o2-table-history').css('display', 'table');
     }
@@ -218,10 +303,13 @@ function show_o2() {
     {
         $('#co2-table-history').css('display', 'none');
         $('#co2-graph-history').css('display', 'none');
+        $('#b-table-history').css('display', 'none');
+        $('#b-graph-history').css('display', 'none');
         $('#o2-table-history').css('display', 'none');
         $('#control-table').css('display', 'none');
         $('#o2-graph-history').css('visibility', 'visible');
         $('#co2-graph-history').css('visibility', 'visible');    
+        $('#b-graph-history').css('visibility', 'visible');    
 
         $('#o2-graph-history').css('display', 'block');
     }
@@ -233,10 +321,13 @@ function show_co2() {
     {
         $('#o2-table-history').css('display', 'none');
         $('#o2-graph-history').css('display', 'none');
+        $('#b-table-history').css('display', 'none');
+        $('#b-graph-history').css('display', 'none');
         $('#co2-graph-history').css('display', 'none');
         $('#control-graph').css('display', 'none');
         $('#o2-graph-history').css('visibility', 'visible');
         $('#co2-graph-history').css('visibility', 'visible');    
+        $('#b-graph-history').css('visibility', 'visible');    
 
         $('#co2-table-history').css('display', 'table');
     }
@@ -244,12 +335,47 @@ function show_co2() {
     {
         $('#o2-table-history').css('display', 'none');
         $('#o2-graph-history').css('display', 'none');
+        $('#b-table-history').css('display', 'none');
+        $('#b-graph-history').css('display', 'none');
         $('#co2-table-history').css('display', 'none');
         $('#control-table').css('display', 'none');
         $('#o2-graph-history').css('visibility', 'visible');
         $('#co2-graph-history').css('visibility', 'visible');    
+        $('#b-graph-history').css('visibility', 'visible');    
 
         $('#co2-graph-history').css('display', 'block');
+    }
+}
+function show_b() {
+    $('#control-display').css('display', 'block');
+    training_type = 'b';
+    if(data_type === 'table')
+    {
+        $('#o2-table-history').css('display', 'none');
+        $('#o2-graph-history').css('display', 'none');
+        $('#co2-table-history').css('display', 'none');
+        $('#co2-graph-history').css('display', 'none');
+        $('#b-graph-history').css('display', 'none');
+        $('#control-graph').css('display', 'none');
+        $('#o2-graph-history').css('visibility', 'visible');
+        $('#co2-graph-history').css('visibility', 'visible');    
+        $('#b-graph-history').css('visibility', 'visible');    
+
+        $('#b-table-history').css('display', 'table');
+    }
+    else
+    {
+        $('#o2-table-history').css('display', 'none');
+        $('#o2-graph-history').css('display', 'none');
+        $('#co2-table-history').css('display', 'none');
+        $('#co2-graph-history').css('display', 'none');
+        $('#b-table-history').css('display', 'none');
+        $('#control-table').css('display', 'none');
+        $('#o2-graph-history').css('visibility', 'visible');
+        $('#co2-graph-history').css('visibility', 'visible');    
+        $('#b-graph-history').css('visibility', 'visible');    
+
+        $('#b-graph-history').css('display', 'block');
     }
 }
 </script>

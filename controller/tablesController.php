@@ -8,9 +8,11 @@ class TablesController
     {
         $user = FreeDivingService::getUserByName($_SESSION['username']);
         
-        $o2_trainings = FreeDivingService::getMyO2Trainings($user);
+        $o2_trainings = FreeDivingService::getMyTrainings($user, 'o');
 
-        $co2_trainings = FreeDivingService::getMyCO2Trainings($user);
+        $co2_trainings = FreeDivingService::getMyTrainings($user, 'c');
+
+        $b_trainings = FreeDivingService::getMyTrainings($user, 'b');
 
         $title = '';
 
@@ -19,8 +21,6 @@ class TablesController
 
     public function start()
     {
-        $projectlist = null;
-
         $user = FreeDivingService::getUserByName($_SESSION['username']);
 
         $tables = FreeDivingService::getMyTables($user);
@@ -32,8 +32,6 @@ class TablesController
     
     public function edit()
     {
-        $projectlist = null;
-
         $user = FreeDivingService::getUserByName($_SESSION['username']);
 
         $tables = null;
@@ -41,6 +39,17 @@ class TablesController
         $title = '';
 
         require_once __DIR__ . '/../view/tables_edit.php';
+    }
+
+    public function onebreath()
+    {
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
+
+        $title = '';
+
+        $best_time_onebreath = FreeDivingService::getMyBestTime($user, 'b');
+
+        require_once __DIR__ . '/../view/tables_onebreath.php';
     }
 
     public function owned()

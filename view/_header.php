@@ -69,65 +69,13 @@
       </li>
 
       <li class="nav-item">
-        <a href="freediving.php?rt=invitations/index" class="nav-link">
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            data-prefix="fad"
-            data-icon="space-shuttle"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 512"
-            class="svg-inline--fa fa-space-shuttle fa-w-20 fa-5x"
-          >
-            <g class="fa-group">
-              <path
-                fill="currentColor"
-                d="M32 416c0 35.35 21.49 64 48 64h16V352H32zm154.54-232h280.13L376 168C243 140.59 222.45 51.22 128 34.65V160h18.34a45.62 45.62 0 0 1 40.2 24zM32 96v64h64V32H80c-26.51 0-48 28.65-48 64zm114.34 256H128v125.35C222.45 460.78 243 371.41 376 344l90.67-16H186.54a45.62 45.62 0 0 1-40.2 24z"
-                class="fa-secondary"
-              ></path>
-              <path
-                fill="currentColor"
-                d="M592.6 208.24C559.73 192.84 515.78 184 472 184H186.54a45.62 45.62 0 0 0-40.2-24H32c-23.2 0-32 10-32 24v144c0 14 8.82 24 32 24h114.34a45.62 45.62 0 0 0 40.2-24H472c43.78 0 87.73-8.84 120.6-24.24C622.28 289.84 640 272 640 256s-17.72-33.84-47.4-47.76zM488 296a8 8 0 0 1-8-8v-64a8 8 0 0 1 8-8c31.91 0 31.94 80 0 80z"
-                class="fa-primary"
-              ></path>
-            </g>
-          </svg>
-          <span class="link-text">Shuttle</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="freediving.php?rt=applications/index" class="nav-link">
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            data-prefix="fad"
-            data-icon="space-shuttle"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 512"
-            class="svg-inline--fa fa-space-shuttle fa-w-20 fa-5x"
-          >
-            <g class="fa-group">
-              <path
-                fill="currentColor"
-                d="M32 416c0 35.35 21.49 64 48 64h16V352H32zm154.54-232h280.13L376 168C243 140.59 222.45 51.22 128 34.65V160h18.34a45.62 45.62 0 0 1 40.2 24zM32 96v64h64V32H80c-26.51 0-48 28.65-48 64zm114.34 256H128v125.35C222.45 460.78 243 371.41 376 344l90.67-16H186.54a45.62 45.62 0 0 1-40.2 24z"
-                class="fa-secondary"
-              ></path>
-              <path
-                fill="currentColor"
-                d="M592.6 208.24C559.73 192.84 515.78 184 472 184H186.54a45.62 45.62 0 0 0-40.2-24H32c-23.2 0-32 10-32 24v144c0 14 8.82 24 32 24h114.34a45.62 45.62 0 0 0 40.2-24H472c43.78 0 87.73-8.84 120.6-24.24C622.28 289.84 640 272 640 256s-17.72-33.84-47.4-47.76zM488 296a8 8 0 0 1-8-8v-64a8 8 0 0 1 8-8c31.91 0 31.94 80 0 80z"
-                class="fa-primary"
-              ></path>
-            </g>
-          </svg>
-          <span class="link-text">Shuttle</span>
+        <a href="freediving.php?rt=tables/onebreath" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" class="fa-primary" d="M640 419.8c0 61.25-62.5 105.5-125.3 88.63l-59.53-15.88c-42.12-11.38-71.25-47.5-71.25-88.63L384 316.4l85.88 57.25c3.625 2.375 8.625 1.375 11-2.25l8.875-13.37c2.5-3.625 1.5-8.625-2.125-11L320 235.3l-167.6 111.8c-1.75 1.125-3 3-3.375 5c-.375 2.125 0 4.25 1.25 6l8.875 13.37c1.125 1.75 3 3 5 3.375c2.125 .375 4.25 0 6-1.125L256 316.4l.0313 87.5c0 41.13-29.12 77.25-71.25 88.63l-59.53 15.88C62.5 525.3 0 481 0 419.8c0-10 1.25-19.88 3.875-29.63C25.5 308.9 59.91 231 105.9 159.1c22.12-34.63 36.12-63.13 80.12-63.13C224.7 96 256 125.4 256 161.8v60.1l32.88-21.97C293.4 196.9 296 192 296 186.6V16C296 7.125 303.1 0 312 0h16c8.875 0 16 7.125 16 16v170.6c0 5.375 2.625 10.25 7.125 13.25L384 221.8v-60.1c0-36.38 31.34-65.75 69.97-65.75c43.1 0 58 28.5 80.13 63.13c46 71.88 80.41 149.8 102 231C638.8 399.9 640 409.8 640 419.8z"/></svg>
+          <span class="link-text">One breath mode</span>
         </a>
       </li>
 
       <?php
-
         if($_SESSION['admin'])
         {
           echo '<li class="nav-item">

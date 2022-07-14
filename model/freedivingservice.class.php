@@ -125,11 +125,11 @@ class FreeDivingService
         return $val1 && $val2;
     }
 
-    public static function getMyO2Trainings($user)
+    public static function getMyTrainings($user, $type)
     {
         $db = DB::getConnection();
         $st = $db->prepare('SELECT * FROM trainings WHERE id_user=:id_user and type=:type');
-        $st->execute(['id_user' => $user->id, 'type' => 'o']);
+        $st->execute(['id_user' => $user->id, 'type' => $type]);
 
         $row = $st->fetch();
 
@@ -137,18 +137,17 @@ class FreeDivingService
 
         while($row = $st->fetch())
         {
-            // if($row['member_type'] == 'application_pending' || $row['member_type'] == 'application_accepted' || $row['member_type'] == 'application_rejected')
             $trainings[] = new Training($row['id'], $row['id_user'], $row['type'], $row['duration'], $row['date']);
         }
 
         return $trainings;
     }
 
-    public static function getMyO2TrainingDatesAndDurations($user)
+    public static function getMyTrainingDatesAndDurations($user, $type)
     {
         $db = DB::getConnection();
         $st = $db->prepare('SELECT * FROM trainings WHERE id_user=:id_user and type=:type');
-        $st->execute(['id_user' => $user->id, 'type' => 'o']);
+        $st->execute(['id_user' => $user->id, 'type' => $type]);
 
         $row = $st->fetch();
 
@@ -156,52 +155,29 @@ class FreeDivingService
 
         while($row = $st->fetch())
         {
-            // if($row['member_type'] == 'application_pending' || $row['member_type'] == 'application_accepted' || $row['member_type'] == 'application_rejected')
             $trainings[] = [$row['date'], $row['duration']];
         }
 
         return $trainings;
     }
 
-    public static function getMyCO2Trainings($user)
+    public static function getMyBestTime($user, $type)
     {
         $db = DB::getConnection();
         $st = $db->prepare('SELECT * FROM trainings WHERE id_user=:id_user and type=:type');
-        $st->execute(['id_user' => $user->id, 'type' => 'c']);
+        $st->execute(['id_user' => $user->id, 'type' => $type]);
 
         $row = $st->fetch();
 
-        $trainings = [];
+        $duration = 0;
 
         while($row = $st->fetch())
         {
-            // if($row['member_type'] == 'application_pending' || $row['member_type'] == 'application_accepted' || $row['member_type'] == 'application_rejected')
-            $trainings[] = new Training($row['id'], $row['id_user'], $row['type'], $row['duration'], $row['date']);
+            if($row['duration'] > $duration) $duration = $row['duration'];
         }
 
-        return $trainings;
+        return $duration;
     }
-
-    public static function getMyCO2TrainingDatesAndDurations($user)
-    {
-        $db = DB::getConnection();
-        $st = $db->prepare('SELECT * FROM trainings WHERE id_user=:id_user and type=:type');
-        $st->execute(['id_user' => $user->id, 'type' => 'c']);
-
-        $row = $st->fetch();
-
-        $trainings = [];
-
-        while($row = $st->fetch())
-        {
-            // if($row['member_type'] == 'application_pending' || $row['member_type'] == 'application_accepted' || $row['member_type'] == 'application_rejected')
-            $trainings[] = [$row['date'], $row['duration']];
-        }
-
-        return $trainings;
-    }
-
-
 
     public static function getProjectByID($id_project)
     {
@@ -664,10 +640,10 @@ class FreeDivingService
 
     public static function addOneBreathTraining($user, $duration)
     {
-        // $db = DB::getConnection();
-        // $st = $db->prepare('INSERT INTO users (username, password_hash, email, registration_sequence, has_registered, admin) VALUES
-        //     (:username, :password_hash, :email, :registration_sequence, :has_registered, :admin)');
-        // $st->execute(['username' => $user->username, 'password_hash' => $user->password_hash, 'email' => $user->email, 'registration_sequence' => $user->registration_sequence, 'has_registered' => $user->has_registered, 'admin' => $user->admin]);
+        $db = DB::getConnection();
+        $st = $db->prepare('INSERT INTO trainings (id_user, type, duration, date) VALUES
+            (:id_user, :type, :duration, CURDATE())');
+        return $st->execute(['id_user' => $user->id, 'type' => 'b', 'duration' => $duration]);
     }
 
     public static function processLoginOrRegister()
