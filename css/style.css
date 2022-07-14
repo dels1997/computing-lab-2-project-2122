@@ -47,8 +47,8 @@ form {
     font-size: 1.2rem;
     /* font-weight: bold; */
     transition: border 500ms;
-    /* display: block;
-    box-sizing: border-box; */
+    display: block;
+    /* box-sizing: border-box; */
 }
 
 .field::after {
@@ -75,8 +75,9 @@ form {
 }
 
 .label1 {
-    z-index: -1;
+    /* z-index: 5; */
     position: absolute;
+    bottom: 0.25rem;
     transform: translateY(-2rem);
     transform-origin: 0%;
     transition: transform 400ms;

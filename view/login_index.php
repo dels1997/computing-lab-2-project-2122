@@ -15,7 +15,7 @@
             <label for="password" class="label1">Password</label>
         </div>
         <button type="submit" name="login" class="btn btn-white btn-big">Enter</button>
-<button type="submit" name="register" class="btn btn-white btn-big">Sign me up</button>
+        <button type="submit" name="register" class="btn btn-white btn-big">Sign me up</button>
     </form>
 
 <?php require_once __DIR__ . '/_footer.php'; ?>
