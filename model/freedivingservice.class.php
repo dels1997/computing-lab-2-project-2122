@@ -472,25 +472,25 @@ class FreeDivingService
         }
     }
 
-    public static function getAllProjects()
-    {
-        $projects = [];
-        $users = [];
-        $db = DB::getConnection();
+    // public static function getAllProjects()
+    // {
+    //     $projects = [];
+    //     $users = [];
+    //     $db = DB::getConnection();
 
-        $st = $db->prepare('SELECT * FROM products');
+    //     $st = $db->prepare('SELECT * FROM products');
 
-        $st->execute([]);
+    //     $st->execute([]);
 
-        while($row = $st->fetch())
-        {
-            $project = new Project($row['id'], $row['id_user'], $row['title'], $row['abstract'], $row['number_available'], $row['status']);
-            $username = FreeDivingService::getUserByID($row['id_user'])->username;
-            $projects[] = [$project, $username];
-        }
+    //     while($row = $st->fetch())
+    //     {
+    //         $project = new Project($row['id'], $row['id_user'], $row['title'], $row['abstract'], $row['number_available'], $row['status']);
+    //         $username = FreeDivingService::getUserByID($row['id_user'])->username;
+    //         $projects[] = [$project, $username];
+    //     }
 
-        return $projects;
-    }
+    //     return $projects;
+    // }
 
     public static function isAdminByName($username)
     {
@@ -698,7 +698,7 @@ class FreeDivingService
                     $_SESSION['username'] = $_POST['username'];
                     $_SESSION['admin'] = FreeDivingService::isAdminByName($_POST['username']);
                     // require_once __DIR__ . '/../freediving.php?rt=tables/index';//&id_user=' . $id_user;
-                    return FreeDivingService::getAllProjects();/*?rt=products/index*/
+                    // return FreeDivingService::getAllProjects();/*?rt=products/index*/
                 }
                 else
                 {

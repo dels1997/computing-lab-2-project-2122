@@ -28,13 +28,17 @@ try
 	$st->execute( array( 'tblname' => 'trainings' ) );
 	if( $st->rowCount() > 0 )
 		$has_tables = true;
+
+	$st->execute( array( 'tblname' => 'sales' ) );
+	if( $st->rowCount() > 0 )
+		$has_tables = true;
 }
 catch( PDOException $e ) { exit( "PDO error [show tables]: " . $e->getMessage() ); }
 
 
 if( $has_tables )
 {
-	exit( 'Tablice users / products / tables / trainings već postoje. Obrišite ih pa probajte ponovno.' );
+	exit( 'Tablice users / products / tables / trainings / sales već postoje. Obrišite ih pa probajte ponovno.' );
 }
 
 
@@ -63,10 +67,10 @@ try
 		'CREATE TABLE IF NOT EXISTS products (' .
 		'id int NOT NULL PRIMARY KEY AUTO_INCREMENT,' .
 		'id_user int NOT NULL,' .
-		'title varchar(50) NOT NULL,' .
-		'abstract varchar(1000) NOT NULL,' .
-		'number_available int NOT NULL,' .
-		'status varchar(10) NOT NULL)'
+		'name varchar(50) NOT NULL,' .
+		'description varchar(1000) NOT NULL,' .
+		'price int NOT NULL,' .
+		'number_available int NOT NULL)'
 	);
 
 	$st->execute();
@@ -109,6 +113,23 @@ catch( PDOException $e ) { exit( "PDO error [create trainings]: " . $e->getMessa
 
 echo "Napravio tablicu trainings.<br />";
 
+try
+{
+	$st = $db->prepare(
+		'CREATE TABLE IF NOT EXISTS sales (' .
+		'id int NOT NULL PRIMARY KEY AUTO_INCREMENT,' .
+		'id_product INT NOT NULL,' .
+		'id_user INT NOT NULL,' .
+		'rating INT,' .
+		'comment VARCHAR(50))'
+	);
+
+	$st->execute();
+}
+catch( PDOException $e ) { exit( "PDO error [create sales]: " . $e->getMessage() ); }
+
+echo "Napravio tablicu sales.<br />";
+
 // Ubaci neke korisnike unutra
 try
 {
@@ -122,19 +143,16 @@ try
 }
 catch( PDOException $e ) { exit( "PDO error [insert users]: " . $e->getMessage() ); }
 
-echo "Ubacio u tablicu users.<br />";
-
-
 // Ubaci neke projekte unutra (ovo nije baš pametno ovako raditi, preko hardcodiranih id-eva usera)
 try
 {
-	$st = $db->prepare( 'INSERT INTO products(id_user, title, abstract, number_available, status) VALUES (:id, :t, :a, :no, :st)' );
+	$st = $db->prepare( 'INSERT INTO products(id_user, name, description, price, number_available) VALUES (:id, :n, :d, :p, :no)' );
 
-	$st->execute( array( 'id' => 1, 't' => 'Spearfishing rifle', 'a' => 'Perfect condition, used only twice.', 'no' => 1, 'st' => 'open' ) ); // mirko
-	$st->execute( array( 'id' => 2, 't' => 'Speedo bathing suit', 'a' => 'Brand new, color optional.', 'no' => 50, 'st' => 'open' ) ); // ana
-	$st->execute( array( 'id' => 3, 't' => 'Manual of Freediving', 'a' => 'Brand new books (by Umberto Pelizzari).', 'no' => 5, 'st' => 'open' ) ); // maja
- 	$st->execute( array( 'id' => 1, 't' => 'Nose clip', 'a' => 'Metal, in two colors.', 'no' => 100, 'st' => 'closed' ) ); // mirko
-	$st->execute( array( 'id' => 4, 't' => 'Projekt za RP2', 'a' => 'Već ćemo nešto smisliti, prvo idemo okupiti tim.', 'no' => 4, 'st' => 'open' ) ); // slavko
+	$st->execute( array( 'id' => 1, 'n' => 'Spearfishing rifle', 'd' => 'Perfect condition, used only twice.', 'p' => 1500, 'no' => 1) ); // mirko
+	$st->execute( array( 'id' => 2, 'n' => 'Speedo bathing suit', 'd' => 'Brand new, color optional.', 'p' => 200, 'no' => 50 ) ); // ana
+	$st->execute( array( 'id' => 3, 'n' => 'Manual of Freediving', 'd' => 'Brand new books (by Umberto Pelizzari).', 'p' => 250, 'no' => 5 ) ); // maja
+ 	$st->execute( array( 'id' => 1, 'n' => 'Nose clip', 'd' => 'Metal, in two colors.', 'p' => 30, 'no' => 100 ) ); // mirko
+	$st->execute( array( 'id' => 4, 'n' => 'Monofin', 'd' => 'Used for two years, at third of price now.', 'p' => 150, 'no' => 1 ) ); // slavko
 }
 catch( PDOException $e ) { exit( "PDO error [products]: " . $e->getMessage() ); }
 
@@ -196,21 +214,26 @@ try
 	$st->execute( array( 'id' => 18, 'id_user' => 1, 'type' => 'b', 'duration' => 200, 'date' => '2022-01-09'  ) ); // mirko
 	$st->execute( array( 'id' => 19, 'id_user' => 1, 'type' => 'b', 'duration' => 220, 'date' => '2022-01-11'  ) ); // mirko
 	$st->execute( array( 'id' => 20, 'id_user' => 1, 'type' => 'b', 'duration' => 450, 'date' => '2022-01-12'  ) ); // mirko
-	
-	// $st->execute( array( 'id_project' => 1, 'id_user' => 1, 'type' => 'member' ) ); // autor (mirko) - go
-	// $st->execute( array( 'id_project' => 2, 'id_user' => 2, 'type' => 'member' ) ); // autor (ana) - fejsbuk
-	// $st->execute( array( 'id_project' => 3, 'id_user' => 3, 'type' => 'member' ) ); // autor (maja) - recepti
-	// $st->execute( array( 'id_project' => 4, 'id_user' => 1, 'type' => 'member' ) ); // autor (mirko) - amazon
-	// $st->execute( array( 'id_project' => 5, 'id_user' => 4, 'type' => 'member' ) ); // autor (slavko) - rp2
-	// $st->execute( array( 'id_project' => 2, 'id_user' => 3, 'type' => 'invitation_accepted' ) ); // maja - fejsbuk
-	// $st->execute( array( 'id_project' => 2, 'id_user' => 5, 'type' => 'application_accepted' ) ); // pero - fejsbuk
-	// $st->execute( array( 'id_project' => 4, 'id_user' => 4, 'type' => 'application_accepted' ) ); // slavko - amazon
-	// $st->execute( array( 'id_project' => 3, 'id_user' => 5, 'type' => 'member' ) ); // pero - recepti
-	// $st->execute( array( 'id_project' => 3, 'id_user' => 1, 'type' => 'application_pending' ) ); // mirko - recepti
-	// $st->execute( array( 'id_project' => 5, 'id_user' => 2, 'type' => 'invitation_pending' ) ); // ana - rp2
 }
 catch( PDOException $e ) { exit( "PDO error [trainings]: " . $e->getMessage() ); }
 
 echo "Ubacio u tablicu trainings.<br />";
 
+try
+{
+	$st = $db->prepare( 'INSERT INTO sales(id, id_product, id_user, rating, comment) VALUES (:id, :id_product, :id_user, NULL, NULL)' );
+
+	$st->execute( array( 'id' => 1, 'id_product' => 2, 'id_user' => 1 ) ); // 
+	$st->execute( array( 'id' => 2, 'id_product' => 3, 'id_user' => 1 ) ); // 
+
+	$st->execute( array( 'id' => 6, 'id_product' => 1, 'id_user' => 2 ) ); // 
+	$st->execute( array( 'id' => 7, 'id_product' => 1, 'id_user' => 3 ) ); // 
+	$st->execute( array( 'id' => 8, 'id_product' => 4, 'id_user' => 2 ) ); // 
+	$st->execute( array( 'id' => 9, 'id_product' => 4, 'id_user' => 4 ) ); // 
+
+	
+}
+catch( PDOException $e ) { exit( "PDO error [sales]: " . $e->getMessage() ); }
+
+echo "Ubacio u tablicu sales.<br />";
 ?>
