@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/teamupservice.class.php';
+require_once __DIR__ . '/freedivingservice.class.php';
 
 function send_JSON_and_exit($message)
 {
@@ -27,9 +27,9 @@ if(not_in_range($o2_breathe) || not_in_range($o2_hold) || not_in_range($co2_brea
     send_JSON_and_exit($msg);
 }
 
-$user = TeamUpService::getUserByName($_POST['username']);
+$user = FreeDivingService::getUserByName($_POST['username']);
 
-$msg['val'] = TeamUpService::changeMyTables($user, $o2_breathe, $o2_hold, $co2_breathe, $co2_hold);
+$msg['val'] = FreeDivingService::changeMyTables($user, $o2_breathe, $o2_hold, $co2_breathe, $co2_hold);
 
 send_JSON_and_exit($msg);
 ?>

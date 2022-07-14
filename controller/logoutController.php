@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../model/teamupservice.class.php';
+require_once __DIR__ . '/../model/freedivingservice.class.php';
 
 class logoutController
 {
@@ -8,7 +8,7 @@ class logoutController
     {
         $title = 'Thank You for using our service!';
 
-        TeamUpService::processLogout();
+        FreeDivingService::processLogout();
 
         require_once __DIR__ . '/../view/login_index.php';
     }

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/teamupservice.class.php';
+require_once __DIR__ . '/freedivingservice.class.php';
 
 function send_JSON_and_exit($message)
 {
@@ -30,15 +30,15 @@ $msg = [];
 $training_type = $_GET['type'];
 
 
-$user = TeamUpService::getUserByName($_GET['username']);
+$user = FreeDivingService::getUserByName($_GET['username']);
 
 if($training_type === 'o')
 {
-    $msg['trainings'] = TeamUpService::getMyO2TrainingDatesAndDurations($user);
+    $msg['trainings'] = FreeDivingService::getMyO2TrainingDatesAndDurations($user);
 }
 else if($training_type === 'c')
 {
-    $msg['trainings'] = TeamUpService::getMyCO2TrainingDatesAndDurations($user);
+    $msg['trainings'] = FreeDivingService::getMyCO2TrainingDatesAndDurations($user);
 }
 
 send_JSON_and_exit($msg);

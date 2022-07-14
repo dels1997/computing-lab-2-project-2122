@@ -1,16 +1,16 @@
 <?php
 
-require_once __DIR__ . '/../model/teamupservice.class.php';
+require_once __DIR__ . '/../model/freedivingservice.class.php';
 
 class TablesController
 {
     public function index()
     {
-        $user = TeamUpService::getUserByName($_SESSION['username']);
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
         
-        $o2_trainings = TeamUpService::getMyO2Trainings($user);
+        $o2_trainings = FreeDivingService::getMyO2Trainings($user);
 
-        $co2_trainings = TeamUpService::getMyCO2Trainings($user);
+        $co2_trainings = FreeDivingService::getMyCO2Trainings($user);
 
         $title = '';
 
@@ -21,9 +21,9 @@ class TablesController
     {
         $projectlist = null;
 
-        $user = TeamUpService::getUserByName($_SESSION['username']);
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
 
-        $tables = TeamUpService::getMyTables($user);
+        $tables = FreeDivingService::getMyTables($user);
 
         $title = '';
 
@@ -34,7 +34,7 @@ class TablesController
     {
         $projectlist = null;
 
-        $user = TeamUpService::getUserByName($_SESSION['username']);
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
 
         $tables = null;
 
@@ -45,9 +45,9 @@ class TablesController
 
     public function owned()
     {
-        $user = TeamUpService::getUserByName($_SESSION['username']);
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
         
-        $projectlist = TeamUpService::getMyProjects($user);
+        $projectlist = FreeDivingService::getMyProjects($user);
         $title = 'List of my projects';
 
         require_once __DIR__ . '/../view/tables_index.php';
@@ -57,28 +57,28 @@ class TablesController
     {
         $id_project = $_GET['id_project'];
 
-        $project_current = TeamUpService::getProjectByID($id_project);
+        $project_current = FreeDivingService::getProjectByID($id_project);
 
         $id_user = $project_current->id_user;
 
-        $user = TeamUpService::getUserByID($id_user);
+        $user = FreeDivingService::getUserByID($id_user);
 
-        $memberlist = TeamUpService::getProjectMembersByID($id_project);
+        $memberlist = FreeDivingService::getProjectMembersByID($id_project);
 
         $projectlist = [];
         $projectlist[] = [$project_current, $user->username];
 
-        $logged_user = TeamUpService::getUserByName($_SESSION['username']);
+        $logged_user = FreeDivingService::getUserByName($_SESSION['username']);
 
-        $project_full = TeamUpService::projectFull($id_project);
+        $project_full = FreeDivingService::projectFull($id_project);
 
         $iAmAuthor = ($id_user === $logged_user->id);
 
-        $member_applied_invited_already = TeamUpService::isMemberAppliedInvitedTo($logged_user->id, $id_project);
+        $member_applied_invited_already = FreeDivingService::isMemberAppliedInvitedTo($logged_user->id, $id_project);
 
         $title = 'Info about project ' . $project_current->title . '</br>';
 
-        $applicationlist = TeamUpService::getProjectApplicationsByID($id_project);
+        $applicationlist = FreeDivingService::getProjectApplicationsByID($id_project);
 
         require_once __DIR__ . '/../view/projects_show.php';
     }
@@ -87,25 +87,25 @@ class TablesController
     {
         $id_project = $_GET['id_project'];
 
-        $project_current = TeamUpService::getProjectByID($id_project);
+        $project_current = FreeDivingService::getProjectByID($id_project);
 
-        $logged_user = TeamUpService::getUserByName($_SESSION['username']);
+        $logged_user = FreeDivingService::getUserByName($_SESSION['username']);
 
         $id_user = $project_current->id_user;
 
-        $user = TeamUpService::getUserByID($id_user);
+        $user = FreeDivingService::getUserByID($id_user);
 
-        $memberlist = TeamUpService::getProjectMembersByID($id_project);
+        $memberlist = FreeDivingService::getProjectMembersByID($id_project);
 
-        $member_applied_invited_already = TeamUpService::isMemberAppliedInvitedTo($logged_user->id, $id_project);
+        $member_applied_invited_already = FreeDivingService::isMemberAppliedInvitedTo($logged_user->id, $id_project);
         
-        $project_full = TeamUpService::projectFull($id_project);
+        $project_full = FreeDivingService::projectFull($id_project);
 
         $application_successfull = False;
 
         if(!($member_applied_invited_already || $project_full))
         {
-            TeamUpService::applyToProject($logged_user->id, $id_project);
+            FreeDivingService::applyToProject($logged_user->id, $id_project);
             $application_successfull = True;
         }
 
@@ -122,27 +122,27 @@ class TablesController
     {
         $id_project = $_GET['id_project'];
 
-        $invited_user = TeamUpService::getUserByName($_POST['person_to_invite']);
+        $invited_user = FreeDivingService::getUserByName($_POST['person_to_invite']);
 
         if($invited_user)
         {
-            $logged_user = TeamUpService::getUserByName($_SESSION['username']);
+            $logged_user = FreeDivingService::getUserByName($_SESSION['username']);
     
             // $id_user = $project_current->id_user;
     
-            // $user = TeamUpService::getUserByID($id_user);
+            // $user = FreeDivingService::getUserByID($id_user);
     
-            // $memberlist = TeamUpService::getProjectMembersByID($id_project);
+            // $memberlist = FreeDivingService::getProjectMembersByID($id_project);
     
-            $member_already = TeamUpService::isMemberAppliedInvitedTo($invited_user->id, $id_project);
+            $member_already = FreeDivingService::isMemberAppliedInvitedTo($invited_user->id, $id_project);
     
-            $project_full = TeamUpService::projectFull($id_project);
+            $project_full = FreeDivingService::projectFull($id_project);
     
             $invitation_successfull = False;
     
             if(!($member_already || $project_full))
             {
-                $invitation_successfull = TeamUpService::inviteMember($invited_user->id, $id_project);
+                $invitation_successfull = FreeDivingService::inviteMember($invited_user->id, $id_project);
             }
         }
         else
@@ -157,17 +157,17 @@ class TablesController
 
     public function decision()
     {
-        // $user = TeamUpService::getUserByName($_SESSION['username']);
-        // $invitationlist = TeamUpService::getMyInvitations($user->id);
+        // $user = FreeDivingService::getUserByName($_SESSION['username']);
+        // $invitationlist = FreeDivingService::getMyInvitations($user->id);
 
         // $projects = [];
         // if(!empty($invitationlist))
         // {
         //     foreach($invitationlist as $invitation)
         //     {
-        //         $project = TeamUpService::getProjectByID($invitation->id_project);
-        //         $inviting_user = TeamUpService::getUserByID($project->id_user);
-        //         $projects[] = [TeamUpService::getProjectByID($invitation->id_project), $inviting_user, $invitation->member_type];
+        //         $project = FreeDivingService::getProjectByID($invitation->id_project);
+        //         $inviting_user = FreeDivingService::getUserByID($project->id_user);
+        //         $projects[] = [FreeDivingService::getProjectByID($invitation->id_project), $inviting_user, $invitation->member_type];
         //     }
         // }
 
@@ -176,14 +176,14 @@ class TablesController
         $application_accepted = False;
         if(isset($_POST['accept']))
         {
-            $current_user = TeamUpService::getUserByName($_SESSION['username']);
-            TeamUpService::acceptApplication($_POST['id_user'], $_GET['id_project']);
+            $current_user = FreeDivingService::getUserByName($_SESSION['username']);
+            FreeDivingService::acceptApplication($_POST['id_user'], $_GET['id_project']);
             $application_accepted = True;
         }
         else
         {
-            $current_user = TeamUpService::getUserByName($_SESSION['username']);
-            TeamUpService::rejectApplication($_POST['id_user'], $_GET['id_project']);
+            $current_user = FreeDivingService::getUserByName($_SESSION['username']);
+            FreeDivingService::rejectApplication($_POST['id_user'], $_GET['id_project']);
         }
 
         $title = 'Application status';

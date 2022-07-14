@@ -9,6 +9,8 @@ if(session_id() === "")
 // Provjeri je li postavljena varijabla rt; kopiraj ju u $route
 if( isset( $_GET['rt'] ) && isset($_SESSION['username']))
 	$route = $_GET['rt'];
+elseif(isset($_GET['rt']) && $_GET['rt'] === 'login/finishRegistration')
+	$route = 'login/finishRegistration';
 elseif( isset($_SESSION['username']))
 	$route = 'tables';
 else

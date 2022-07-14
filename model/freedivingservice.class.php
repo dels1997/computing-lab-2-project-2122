@@ -7,7 +7,7 @@ require_once __DIR__ . '/project.class.php';
 require_once __DIR__ . '/training.class.php';
 require_once __DIR__ . '/table.class.php';
 
-class TeamUpService
+class FreeDivingService
 {
     public static function getUserByID($id_user)
     {
@@ -59,8 +59,8 @@ class TeamUpService
         while($row = $st->fetch())
         {
             $id_project = $row['id_project'];
-            $project = TeamUpService::getProjectByID($id_project);
-            $user = TeamUpService::getAuthorByProjectID($project->id);
+            $project = FreeDivingService::getProjectByID($id_project);
+            $user = FreeDivingService::getAuthorByProjectID($project->id);
             $projects[] = [$project, $user->username, null];
         }
 
@@ -258,9 +258,9 @@ class TeamUpService
         $st = $db->prepare('SELECT * FROM members WHERE id_project=:id_project');
         $st->execute(['id_project' => $id_project]);
         
-        $project = TeamUpService::getProjectByID($id_project);
+        $project = FreeDivingService::getProjectByID($id_project);
 
-        $user = TeamUpService::getUserByID($project->id_user);
+        $user = FreeDivingService::getUserByID($project->id_user);
 
         $memberlist = [];
         while($row = $st->fetch())
@@ -269,7 +269,7 @@ class TeamUpService
             {
                 $id_member = $row['id_user'];
                 if($id_member !== $user->id)
-                    $memberlist[] = TeamUpService::getUserByID($id_member);
+                    $memberlist[] = FreeDivingService::getUserByID($id_member);
             }
         }
 
@@ -307,7 +307,7 @@ class TeamUpService
                 ++$broj_clanova;
         }
 
-        $project = TeamUpService::getProjectByID($id_project);
+        $project = FreeDivingService::getProjectByID($id_project);
         $dopusteni_broj_clanova = $project->number_of_members;
 
         return $broj_clanova >= $dopusteni_broj_clanova;
@@ -342,7 +342,7 @@ class TeamUpService
         $max_number_of_members = $row['number_of_members'];
         if($koliko >= $max_number_of_members)
         {
-            TeamUpService::closeProject($id_project);
+            FreeDivingService::closeProject($id_project);
         }
     }
 
@@ -398,8 +398,8 @@ class TeamUpService
         
         if($success)
         {
-            $added_project_id = TeamUpService::findAddedProjectID($id_user);
-            TeamUpService::addAuthorAsMember($id_user, $added_project_id);
+            $added_project_id = FreeDivingService::findAddedProjectID($id_user);
+            FreeDivingService::addAuthorAsMember($id_user, $added_project_id);
         }
         return $success;
     }
@@ -418,7 +418,7 @@ class TeamUpService
 
         $st->execute(['member_type' => 'invitation_accepted', 'id_project' => $id_project, 'id_user' => $id_user]);
 
-        TeamUpService::closeProjectIfNeeded($id_project);
+        FreeDivingService::closeProjectIfNeeded($id_project);
     }
 
     public static function rejectInvitation($id_user, $id_project)
@@ -456,7 +456,7 @@ class TeamUpService
         while($row = $st->fetch())
         {
             if($row['member_type'] === 'application_pending')
-                $applications[] = [new Member($row['id'], $row['id_project'], $row['id_user'], $row['member_type']), TeamUpService::getUserByID($row['id_user'])];
+                $applications[] = [new Member($row['id'], $row['id_project'], $row['id_user'], $row['member_type']), FreeDivingService::getUserByID($row['id_user'])];
         }
 
         return $applications;
@@ -469,7 +469,7 @@ class TeamUpService
 
         $st->execute(['member_type' => 'application_accepted', 'id_project' => $id_project, 'id_user' => $id_user]);
 
-        TeamUpService::closeProjectIfNeeded($id_project);
+        FreeDivingService::closeProjectIfNeeded($id_project);
     }
 
     public static function rejectApplication($id_user, $id_project)
@@ -482,8 +482,8 @@ class TeamUpService
     public static function addUser($user)
     {
         $db = DB::getConnection();
-        $st = $db->prepare('INSERT INTO users (username, password_hash, email, registration_sequence, has_registered) VALUES
-            (:username, :password_hash, :email, :registration_sequence, :has_registered)');
+        $st = $db->prepare('INSERT INTO users (username, password_hash, email, registration_sequence, has_registered, admin) VALUES
+            (:username, :password_hash, :email, :registration_sequence, :has_registered, :admin)');
         $st->execute(['username' => $user->username, 'password_hash' => $user->password_hash, 'email' => $user->email, 'registration_sequence' => $user->registration_sequence, 'has_registered' => $user->has_registered, 'admin' => $user->admin]);
     }
 
@@ -509,7 +509,7 @@ class TeamUpService
         while($row = $st->fetch())
         {
             $project = new Project($row['id'], $row['id_user'], $row['title'], $row['abstract'], $row['number_available'], $row['status']);
-            $username = TeamUpService::getUserByID($row['id_user'])->username;
+            $username = FreeDivingService::getUserByID($row['id_user'])->username;
             $projects[] = [$project, $username];
         }
 
@@ -604,6 +604,34 @@ class TeamUpService
         return $st->execute(['id' => $id, 'admin' => 1]);
     }
 
+    public static function getUserByRegistrationSequence($sequence)
+    {
+        $db = DB::getConnection();
+
+        $st = $db->prepare('SELECT * FROM users WHERE registration_sequence=:registration_sequence');
+
+        $st->execute(['registration_sequence' => $sequence]);
+
+        $row = $st->fetch();
+
+        return FreeDivingService::getUserByID($row['id']);
+    }
+
+    public static function addHasRegistered($user)
+    {
+        $db = DB::getConnection();
+
+        $st = $db->prepare('UPDATE users SET has_registered=:has_registered WHERE id=:id_user');
+
+        $st->execute(['has_registered' => 1, 'id_user' => $user->id]);
+
+        $default_table = '1:001:001:001:001:001:00';
+
+        $st = $db->prepare( 'INSERT INTO tables (id_user, o2_table, co2_table) VALUES (:id_user, :o2_table, :co2_table)' );
+
+        $st->execute(['id_user' => $user->id, 'o2_table' => $default_table, 'co2_table' => $default_table]);
+    }
+
     public static function processLoginOrRegister()
     {
         // echo 'u processloginorregister smo prije return</br>';
@@ -620,7 +648,7 @@ class TeamUpService
         if(isset($_POST['login']))
         {
             // echo 'login set';
-            // return TeamUpService::getAllProjects();
+            // return FreeDivingService::getAllProjects();
     
             // require_once __DIR__ . '/../view/projects_index.php';
     
@@ -655,9 +683,9 @@ class TeamUpService
                     //crtaj_uspjesnoUlogiran( $_POST['username' ] );
                     $_SESSION['login'] = $_POST['username'] . ',' . $hash . ',' . $id_user;
                     $_SESSION['username'] = $_POST['username'];
-                    $_SESSION['admin'] = TeamUpService::isAdminByName($_POST['username']);
-                    // require_once __DIR__ . '/../teamup.php?rt=projects/index';//&id_user=' . $id_user;
-                    return TeamUpService::getAllProjects();/*?rt=products/index*/
+                    $_SESSION['admin'] = FreeDivingService::isAdminByName($_POST['username']);
+                    // require_once __DIR__ . '/../freediving.php?rt=tables/index';//&id_user=' . $id_user;
+                    return FreeDivingService::getAllProjects();/*?rt=products/index*/
                 }
                 else
                 {
@@ -666,7 +694,7 @@ class TeamUpService
                     return False;
                 }
             }
-            // return TeamUpService::getAllProjects();
+            // return FreeDivingService::getAllProjects();
         }
         else
         {
@@ -674,41 +702,65 @@ class TeamUpService
             $email = $_POST["username"] ?? null;
             // Koristimo built-in funkcionalnosti da se riješimo eventualnog smeća u unosu.
             $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-            $username = $_POST["username"] ?? null;
-            $password = $_POST["password"] ?? null;
-            if (!$email || !$username || !$password)
+            // $username = $_POST["username"] ?? null;
+            $username = strtok($_POST["username"], '@') ?? null;
+
+            // provjera postoji li već taj user
+            $db = DB::getConnection();
+    
+            try
             {
-                $_SESSION["registerErrorMessage"] = "Enter all the fields!";
-                // header('Location: ' . __SITE_URL .'/hotels');
+                $st = $db->prepare( 'SELECT * FROM users WHERE username=:username' );
+                $st->execute( array( 'username' => $username ) );
             }
-            // elseif (User::where("username", $username))
-            // {
-            //     $_SESSION["registerErrorMessage"] = "Username already exists!";
-                // header('Location: ' . __SITE_URL .'/hotels');
-            // }
+            catch( PDOException $e ) { require_once __DIR__ . '/../view/login_index.php'; return False; }
+    
+            $row = $st->fetch();
+    
+            if( !($row === false) )
+            {
+                echo 'Existing username!'; 
+                // Taj user ne postoji, upit u bazu nije vratio ništa.
+                require_once __DIR__ . '/../view/login_index.php';
+                return False;
+            }
             else
             {
-                // echo 'tusmo';
-                $link = '<a href = "http://' . $_SERVER["HTTP_HOST"] . __SITE_URL . "/login/finishRegistration&sequence=";
-                $sequence = "";
-
-                // U svrhu sigurnosti, niz za potvrdu registracije generira se nasumično.
-                for ($i = 0; $i < random_int(10, 20); $i++) $sequence .= chr(random_int(97, 122));
-                $link .= $sequence . '">link</a>';
-
-                $user = new User(-1, $username, password_hash($password, PASSWORD_DEFAULT), $email, $sequence, 0, false);
-
-                TeamUpService::addUser($user);
-                $subject = "Registration for TeamUp";
-                $body = "Click on the following " . $link . " to finish your registration for TeamUp!";
-                $headers = "Content-type: text/html\r\n";
-                $headers .= "To: " . $email . "\r\n";
-                $headers .= 'From: TeamUp <dels@teamup.com>' . "\r\n";
-                if (mail($email, $subject, $body, $headers))
+                $password = $_POST["password"] ?? null;
+                if (!$email || !$username || !$password)
                 {
-                    echo "Check your mail to finish registration :)";
-                    return;
-                } else "Something's wrong: " . var_dump(error_get_last());
+                    $_SESSION["registerErrorMessage"] = "Enter all the fields!";
+                    // header('Location: ' . __SITE_URL .'/hotels');
+                }
+                // elseif (User::where("username", $username))
+                // {
+                //     $_SESSION["registerErrorMessage"] = "Username already exists!";
+                    // header('Location: ' . __SITE_URL .'/hotels');
+                // }
+                else
+                {
+                    // echo 'tusmo';
+                    $link = '<a href = "http://' . $_SERVER["HTTP_HOST"] . __SITE_URL . "/freediving.php?rt=login/finishRegistration&sequence=";
+                    $sequence = "";
+
+                    // U svrhu sigurnosti, niz za potvrdu registracije generira se nasumično.
+                    for ($i = 0; $i < 3; $i++) $sequence .= chr(random_int(97, 122));
+                    $link .= $sequence . '">link</a>';
+
+                    $user = new User(-1, $username, password_hash($password, PASSWORD_DEFAULT), $email, $sequence, 0, 0);
+
+                    FreeDivingService::addUser($user);
+                    $subject = "Registration for freeDiving";
+                    $body = "Click on the following " . $link . " to finish your registration for freeDiving by dels!";
+                    $headers = "Content-type: text/html\r\n";
+                    $headers .= "To: " . $email . "\r\n";
+                    $headers .= 'From: freeDiving <dels@freediving.com>' . "\r\n";
+                    if (mail($email, $subject, $body, $headers))
+                    {
+                        echo "Check your mail to finish registration and join us!";
+                        return;
+                    } else "Something's wrong: " . var_dump(error_get_last());
+                }
             }
         }
     }

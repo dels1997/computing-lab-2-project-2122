@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/teamupservice.class.php';
+require_once __DIR__ . '/freedivingservice.class.php';
 
 function send_JSON_and_exit($message)
 {
@@ -14,12 +14,12 @@ $msg = [];
 
 if($_GET['action'] === 'd')
 {
-    $msg['val'] = TeamUpService::deleteUserByID($_GET['id']);
+    $msg['val'] = FreeDivingService::deleteUserByID($_GET['id']);
 }
 else if($_GET['action'] === 'a')
 {
-    $msg['val'] = TeamUpService::makeUserAdminByID($_GET['id']);
-    $msg['username'] = TeamUpService::getUserByID($_GET['id'])->username;
+    $msg['val'] = FreeDivingService::makeUserAdminByID($_GET['id']);
+    $msg['username'] = FreeDivingService::getUserByID($_GET['id'])->username;
 }
 else
 {

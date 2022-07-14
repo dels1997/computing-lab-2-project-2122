@@ -1,20 +1,20 @@
 <?php
 
-require_once __DIR__ . '/../model/teamupservice.class.php';
+require_once __DIR__ . '/../model/freedivingservice.class.php';
 
 class ApplicationsController
 {
     public function index()
     {
-        $user = TeamUpService::getUserByName($_SESSION['username']);
-        $applicationlist = TeamUpService::getMyApplications($user->id);
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
+        $applicationlist = FreeDivingService::getMyApplications($user->id);
         
         $projects = [];
         if(!empty($applicationlist))
         {
             foreach($applicationlist as $application)
             {
-                $projects[] = [TeamUpService::getProjectByID($application->id_project), TeamUpService::getUserByID($application->id_user), $application->member_type];
+                $projects[] = [FreeDivingService::getProjectByID($application->id_project), FreeDivingService::getUserByID($application->id_user), $application->member_type];
             }
         }
 
@@ -25,11 +25,11 @@ class ApplicationsController
 
     // public function owned()
     // {
-    //     $user = TeamUpService::getUserByName($_SESSION['username']);
+    //     $user = FreeDivingService::getUserByName($_SESSION['username']);
         
-    //     // $user = TeamUpService::getUserByID($id_user->id);
+    //     // $user = FreeDivingService::getUserByID($id_user->id);
 
-    //     $projectlist = TeamUpService::getMyProjects($user);
+    //     $projectlist = FreeDivingService::getMyProjects($user);
     //     $title = 'List of my projects';
 
     //     require_once __DIR__ . '/../view/projects_index.php';

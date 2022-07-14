@@ -1,22 +1,22 @@
 <?php
 
-require_once __DIR__ . '/../model/teamupservice.class.php';
+require_once __DIR__ . '/../model/freedivingservice.class.php';
 
 class invitationsController
 {
     public function index()
     {
-        $user = TeamUpService::getUserByName($_SESSION['username']);
-        $invitationlist = TeamUpService::getMyInvitations($user->id);
+        $user = FreeDivingService::getUserByName($_SESSION['username']);
+        $invitationlist = FreeDivingService::getMyInvitations($user->id);
 
         $projects = [];
         if(!empty($invitationlist))
         {
             foreach($invitationlist as $invitation)
             {
-                $project = TeamUpService::getProjectByID($invitation->id_project);
-                $inviting_user = TeamUpService::getUserByID($project->id_user);
-                $projects[] = [TeamUpService::getProjectByID($invitation->id_project), $inviting_user, $invitation->member_type];
+                $project = FreeDivingService::getProjectByID($invitation->id_project);
+                $inviting_user = FreeDivingService::getUserByID($project->id_user);
+                $projects[] = [FreeDivingService::getProjectByID($invitation->id_project), $inviting_user, $invitation->member_type];
             }
         }
 
@@ -27,31 +27,31 @@ class invitationsController
 
     public function decision()
     {
-        // $user = TeamUpService::getUserByName($_SESSION['username']);
-        // $invitationlist = TeamUpService::getMyInvitations($user->id);
+        // $user = FreeDivingService::getUserByName($_SESSION['username']);
+        // $invitationlist = FreeDivingService::getMyInvitations($user->id);
 
         // $projects = [];
         // if(!empty($invitationlist))
         // {
         //     foreach($invitationlist as $invitation)
         //     {
-        //         $project = TeamUpService::getProjectByID($invitation->id_project);
-        //         $inviting_user = TeamUpService::getUserByID($project->id_user);
-        //         $projects[] = [TeamUpService::getProjectByID($invitation->id_project), $inviting_user, $invitation->member_type];
+        //         $project = FreeDivingService::getProjectByID($invitation->id_project);
+        //         $inviting_user = FreeDivingService::getUserByID($project->id_user);
+        //         $projects[] = [FreeDivingService::getProjectByID($invitation->id_project), $inviting_user, $invitation->member_type];
         //     }
         // }
 
         $invitation_accepted = 0;
         if(isset($_POST['accept']))
         {
-            $current_user = TeamUpService::getUserByName($_SESSION['username']);
-            TeamUpService::acceptInvitation($current_user->id, $_GET['id_project']);
+            $current_user = FreeDivingService::getUserByName($_SESSION['username']);
+            FreeDivingService::acceptInvitation($current_user->id, $_GET['id_project']);
             $invitation_accepted = 1;
         }
         else
         {
-            $current_user = TeamUpService::getUserByName($_SESSION['username']);
-            TeamUpService::rejectInvitation($current_user->id, $_GET['id_project']);
+            $current_user = FreeDivingService::getUserByName($_SESSION['username']);
+            FreeDivingService::rejectInvitation($current_user->id, $_GET['id_project']);
         }
 
         $title = 'Invitation status';
@@ -61,11 +61,11 @@ class invitationsController
 
     // public function owned()
     // {
-    //     $user = TeamUpService::getUserByName($_SESSION['username']);
+    //     $user = FreeDivingService::getUserByName($_SESSION['username']);
         
-    //     // $user = TeamUpService::getUserByID($id_user->id);
+    //     // $user = FreeDivingService::getUserByID($id_user->id);
 
-    //     $projectlist = TeamUpService::getMyProjects($user);
+    //     $projectlist = FreeDivingService::getMyProjects($user);
     //     $title = 'List of my projects';
 
     //     require_once __DIR__ . '/../view/projects_index.php';
