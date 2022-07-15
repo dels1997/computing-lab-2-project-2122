@@ -25,7 +25,9 @@ class loginController
         require_once __DIR__ . '/../view/tables_index.php';
         }
         else
+        {
             require_once __DIR__ . '/../view/login_index.php';
+        }
     }
 
     function finishRegistration()

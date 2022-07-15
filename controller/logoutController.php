@@ -6,7 +6,7 @@ class logoutController
 {
     public function index()
     {
-        $title = 'Thank You for using our service!';
+        // $title = 'Thank You for using our service!';
 
         FreeDivingService::processLogout();
 

@@ -161,23 +161,12 @@ class WebshopService {
 
         return true;
     }
-    
-    public static function addProduct ($id_user, $name, $description, $price) {
-        //$products = [];
 
-        $db = DB::getConnection ();
-        $st = $db->prepare ('INSERT INTO products(id_user, name, description, price) VALUES (:id_user, :name, :description, :price)');
-        $st->execute (['id_user' => $id_user, 'name' => $name, 'description' => $description, 'price' => $price]);
-
-        /*while ($row = $st->fetch ()) {
-            $product = new Product (
-                $row['id'], $row['id_user'], $row['name'], $row['description'], $row['price']
-            );
-
-            $products[] = $product;
-        }
-
-        return $products;*/
+    public static function addProduct($id_user, $name, $description, $price, $number_available)
+    {
+        $db = DB::getConnection();
+        $st = $db->prepare('INSERT INTO products(id_user, name, description, price, number_available) VALUES (:id_user, :name, :description, :price, :number_available)');
+        return $st->execute(['id_user' => $id_user, 'name' => $name, 'description' => $description, 'price' => $price, 'number_available' => $number_available]);
     }
 
     public static function getProductsIBought ($id_user) {

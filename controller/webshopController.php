@@ -16,6 +16,19 @@ class WebshopController {
 
         require_once __DIR__ . '/../view/webshop_index.php';
     }
+
+    public function add() {
+
+        // $user = FreeDivingService::getUserByName($_SESSION['username']);
+
+        // $allProductsInfo = WebshopService::getAllProductsInfo($user); 
+        // $myProductsInfo = WebshopService::getMyProductsInfo($user); 
+        // $boughtProductsInfo = WebshopService::getBoughtProductsInfo($user); 
+        
+        // $title = '';
+
+        require_once __DIR__ . '/../view/webshop_add.php';
+    }
 };
 
 ?>

@@ -99,7 +99,7 @@
         }
       ?>
       <li class="nav-item" id="themeButton">
-        <a href="freediving.php?rt=login/index" class="nav-link">
+        <a href="freediving.php?rt=logout/index" class="nav-link">
           <svg
             class="theme-icon"
             id="lightIcon"
