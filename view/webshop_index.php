@@ -149,7 +149,6 @@ $(document).ready(function() {
         $('.comment-area').remove();
 
         id_product = $(this).attr('id').split('-')[2];
-        console.log(id_product);
 
         let new_element = $('<div class="comment-area" style="float: left;" id="comment-area-' + id_product + '">');
 
