@@ -2,8 +2,6 @@
 
     <form method="POST" action="freediving.php" class="svelte-1yxl0k9" autocomplete="off">
         Login or register
-        <!-- <input type="password" name="password"></br>
-        <button type="submit" name="register">Login or register!</button> -->
         
         <div class="field">
             <input type="text" name="username" class="input1" placeholder="">

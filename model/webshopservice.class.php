@@ -70,7 +70,7 @@ class WebshopService {
         while ($row = $st->fetch())
         {
             $owner = (FreeDivingService::getUserByID($row['id_user']))->username;
-            $products[] = [$row['name'], $row['description'], $row['price'], $owner, $row['id'], WebShopService::canIBuyIt($user->id, $row['id']), $row['number_available'], $row['id']];
+            $products[] = [$row['name'], $row['description'], $row['price'], $owner, $row['id'], WebShopService::canIBuyIt($user->id, $row['id']), $row['number_available']];
         }
         return $products;
     }
@@ -90,6 +90,20 @@ class WebshopService {
         return $products;
     }
 
+    public static function canICommentIt($my_id, $id_product)
+    {
+        $db = DB::getConnection();
+        $st = $db->prepare('SELECT * FROM sales WHERE id_user=:id_user and id_product=:id_product');
+
+        $st->execute(['id_user' => $my_id, 'id_product' => $id_product]);
+
+        $row = $st->fetch();
+
+        if($row['comment'] === null)
+            return [true, null];
+        return [false, $row['comment']];
+    }
+
     public static function getBoughtProductsInfo($user)
     {
         $products = [];
@@ -100,11 +114,14 @@ class WebshopService {
 
         $st2 = $db->prepare('SELECT * FROM products WHERE id=:id_product');
         
+        $st3 = $db->prepare('SELECT * FROM sales WHERE id=:id_product');
+
         while ($row = $st->fetch())
         {
             $st2->execute(['id_product' => $row['id_product']]);
             $row2 = $st2->fetch();
-            $products[] = [$row2['name'], $row2['description'], $row2['price'], $row2['number_available'], $row['id']];
+
+            $products[] = [$row2['name'], $row2['description'], $row2['price'], $row2['number_available'], $row['id_product'], WebshopService::canICommentIt($user->id, $row['id_product'])];
         }
         return $products;
     }
@@ -123,7 +140,7 @@ class WebshopService {
     public static function getCommentsAndRatingsByProductID($id_product)
     {
         $db = DB::getConnection();
-        $st = $db->prepare('SELECT * FROM sales WHERE id=:id_product');
+        $st = $db->prepare('SELECT * FROM sales WHERE id_product=:id_product');
         $st->execute(['id_product' => $id_product]);
 
         $comment_and_ratings = [];
@@ -140,7 +157,7 @@ class WebshopService {
         $total_amount = 0;
         $total_number = 0;
         $db = DB::getConnection();
-        $st = $db->prepare('SELECT * FROM sales WHERE id=:id_product');
+        $st = $db->prepare('SELECT * FROM sales WHERE id_product=:id_product');
         $st->execute(['id_product' => $id_product]);
 
         $ratings = [];
@@ -204,6 +221,13 @@ class WebshopService {
         $db = DB::getConnection();
         $st = $db->prepare('INSERT INTO products(id_user, name, description, price, number_available) VALUES (:id_user, :name, :description, :price, :number_available)');
         return $st->execute(['id_user' => $id_user, 'name' => $name, 'description' => $description, 'price' => $price, 'number_available' => $number_available]);
+    }
+
+    public static function addCommentAndRating($id_user, $id_product, $comment, $rating)
+    {
+        $db = DB::getConnection ();
+        $st = $db->prepare ('UPDATE sales SET rating=:rating, comment=:comment WHERE id_user=:id_user and id_product=:id_product');
+        return $st->execute (['rating' => $rating, 'comment' => $comment, 'id_user' => $id_user, 'id_product' => $id_product]);
     }
 
     public static function getProductsIBought ($id_user) {

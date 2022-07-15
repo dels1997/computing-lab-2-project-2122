@@ -699,6 +699,7 @@ class FreeDivingService
                     $_SESSION['admin'] = FreeDivingService::isAdminByName($_POST['username']);
                     // require_once __DIR__ . '/../freediving.php?rt=tables/index';//&id_user=' . $id_user;
                     // return FreeDivingService::getAllProjects();/*?rt=products/index*/
+                    return True;
                 }
                 else
                 {

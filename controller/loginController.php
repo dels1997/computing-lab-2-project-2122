@@ -22,7 +22,7 @@ class loginController
 
             $title = '';
 
-        require_once __DIR__ . '/../view/tables_index.php';
+            require_once __DIR__ . '/../view/tables_index.php';
         }
         else
         {

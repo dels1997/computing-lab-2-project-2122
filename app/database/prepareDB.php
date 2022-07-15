@@ -221,15 +221,17 @@ echo "Ubacio u tablicu trainings.<br />";
 
 try
 {
-	$st = $db->prepare( 'INSERT INTO sales(id, id_product, id_user, rating, comment) VALUES (:id, :id_product, :id_user, NULL, NULL)' );
+	$st = $db->prepare( 'INSERT INTO sales(id, id_product, id_user, rating, comment) VALUES (:id, :id_product, :id_user, :rating, :comment)' );
 
-	$st->execute( array( 'id' => 1, 'id_product' => 2, 'id_user' => 1 ) ); // 
-	$st->execute( array( 'id' => 2, 'id_product' => 3, 'id_user' => 1 ) ); // 
+	$st->execute( array( 'id' => 1, 'id_product' => 2, 'id_user' => 1, 'rating' => null, 'comment' => null ) ); // 
+	$st->execute( array( 'id' => 2, 'id_product' => 3, 'id_user' => 1, 'rating' => 2, 'comment' => 'Dobar proizvod.'  ) ); // 
 
-	$st->execute( array( 'id' => 6, 'id_product' => 1, 'id_user' => 2 ) ); // 
-	$st->execute( array( 'id' => 7, 'id_product' => 1, 'id_user' => 3 ) ); // 
-	$st->execute( array( 'id' => 8, 'id_product' => 4, 'id_user' => 2 ) ); // 
-	$st->execute( array( 'id' => 9, 'id_product' => 4, 'id_user' => 4 ) ); // 
+	$st->execute( array( 'id' => 6, 'id_product' => 1, 'id_user' => 2, 'rating' => 2, 'comment' => 'Loš proizvod.'  ) ); // 
+	$st->execute( array( 'id' => 7, 'id_product' => 1, 'id_user' => 3, 'rating' => null, 'comment' => null  ) ); // 
+	$st->execute( array( 'id' => 8, 'id_product' => 1, 'id_user' => 5, 'rating' => 1, 'comment' => 'Jako loš proizvod.'  ) ); // 
+
+	$st->execute( array( 'id' => 9, 'id_product' => 4, 'id_user' => 2, 'rating' => 4, 'comment' => 'Solidan proizvod.'  ) ); // 
+	$st->execute( array( 'id' => 10, 'id_product' => 4, 'id_user' => 4, 'rating' => null, 'comment' => null  ) ); // 
 
 	
 }

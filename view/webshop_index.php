@@ -17,7 +17,7 @@
         echo '<thead><th>Name</th><th>Description</th><th>Price</th><th>Owner</th><th>Quantity</th><th>Purchase</th></thead>';
         foreach($allProductsInfo as $productInfo)
         {
-            echo '<tr class="product" id="product-row-' . $productInfo[7] . '">';
+            echo '<tr class="product" id="product-row-' . $productInfo[4] . '">';
             echo '<td>' .  $productInfo[0] . '</td><td>' . $productInfo[1] . '</td><td>' . $productInfo[2] . '</td><td>' . $productInfo[3] . '</td><td>' . $productInfo[6] . '</td>';
             if($productInfo[5])
                 echo '<td><button id="product-' . $productInfo[4] . '" class="buy-btn btn btn-white">Buy!</button>';
@@ -38,11 +38,15 @@
         echo '</table>';
 
         echo '<table class="styled-table" id="bought-products" style="display: none;">';
-        echo '<thead><th>Name</th><th>Description</th><th>Price</th><th>Quantity</th></thead>';
+        echo '<thead><th>Name</th><th>Description</th><th>Price</th><th>Comment</th></thead>';
         foreach($boughtProductsInfo as $productInfo)
         {
-            echo '<tr class="product" id="product-row-' . $productInfo[4] . '">';
-            echo '<td>'  . $productInfo[0] . '</td><td>' . $productInfo[1] . '</td><td>' . $productInfo[2] . '</td><td>' . $productInfo[3] . '</td>';
+            echo '<tr id="product-row-' . $productInfo[4] . '">';
+            echo '<td class="product" id="product-row-' . $productInfo[4] . '">'  . $productInfo[0] . '</td><td class="product" id="product-row-' . $productInfo[4] . '">' . $productInfo[1] . '</td><td class="product" id="product-row-' . $productInfo[4] . '">' . $productInfo[2] . '</td>';
+            if($productInfo[5][0])
+                echo '<td><button id="comment-product-' . $productInfo[4] . '" class="comment-btn btn btn-white">Add comment</button>';
+            else
+                echo '<td>' . $productInfo[5][1] . '</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -101,7 +105,8 @@ $(document).ready(function() {
     });
 
     $('.product').on('click', function() {
-        id_product = $(this).attr('id').split('-')[2];
+        let ovaj = $(this).attr('id');
+        let id_product = $(this).attr('id').split('-')[2];
 
         $.ajax(
         {
@@ -134,32 +139,76 @@ $(document).ready(function() {
                     new_element.append($('<p>Rating: ' + rating + '</p>'));
                 }
                 $('#okolina').append(new_element);
-                // let product_row = $('#product-' + id_product).parent().parent().children();
-                // product_row.eq(4).html(json['quantity']);
-                // $('#notification').html('');
-
-                // if(json['val'])
-                // {
-                //     $('#product-' + id_product).parent().html('');
-                //     $('#bought-products').append($('<tr><td>' +  product_row.eq(0).html() + '</td><td>' +  product_row.eq(1).html() + '</td><td>' + product_row.eq(2).html() + '</td><td>' + product_row.eq(3).html() + '</td></tr>'));
-                //     $("#notification").fadeIn("slow").append('Product bought successfully!');
-                //     $("#notification").click(function() {
-                //         $("#notification").fadeOut("slow");
-                //         $('#notification').html('');
-                //     });
-                // }
-                // else
-                // {
-                //     $("#notification").fadeIn("slow").append('Product NOT bought!');
-                //     $("#notification").click(function() {
-                //         $("#notification").fadeOut("slow");
-                //         $('#notification').html('');
-                //     });
-                // }
             },
             error: function( xhr, status, errorThrown ) { console.log(errorThrown); },
             complete: function( xhr, status ) {  }
         });
+    });
+
+    $('.comment-btn').on('click', function() {
+        $('.comment-area').remove();
+
+        id_product = $(this).attr('id').split('-')[2];
+        console.log(id_product);
+
+        let new_element = $('<div class="comment-area" style="float: left;" id="comment-area-' + id_product + '">');
+
+        let div = $('<div class="field-custom">');
+        div.append($('<input type="text" name="comment" id="comment" class="input-custom" placeholder="">'));
+        div.append($('<label for="comment" class="label1">Comment</label>'));
+        new_element.append(div);
+        div = $('<div class="field-custom">');
+        div.append($('<input type="number" name="rating" id="rating" min=1 max=5 class="input-custom" placeholder="">'));
+        div.append($('<label for="rating" class="label1">Rating</label>'));
+        new_element.append(div);
+        let add_button = $();
+        new_element.append('<button id="send" class="btn btn-white btn-big">Send!');
+        $('#okolina').append(new_element);
+        
+        $('#send').on('click', function() {
+            $('.product-info').remove();
+            $.ajax(
+            {
+                url: "model/add_comment_server.php",
+                data:
+                {
+                    id_product: id_product,
+                    username: $('#u').html(),
+                    comment: $('#comment').val(),
+                    rating: $('#rating').val()
+                },
+                type: "GET",
+                dataType: "json", // očekivani povratni tip podatka
+                success: function( json ) {
+                    let product_row = $('#comment-product-' + id_product).parent().parent().children().eq(4);
+                    product_row.html(json['comment']);
+                    $('#notification').html('');
+
+                    $('.comment-area').remove();
+
+                    if(json['val'])
+                    {
+                        $('#product-' + id_product).parent().html('');
+                        $("#notification").fadeIn("slow").append('Comment added successfully!');
+                        $("#notification").click(function() {
+                            $("#notification").fadeOut("slow");
+                            $('#notification').html('');
+                        });
+                    }
+                    else
+                    {
+                        $("#notification").fadeIn("slow").append('Commend NOT added!');
+                        $("#notification").click(function() {
+                            $("#notification").fadeOut("slow");
+                            $('#notification').html('');
+                        });
+                    }
+                },
+                error: function( xhr, status, errorThrown ) { console.log(errorThrown); },
+                complete: function( xhr, status ) {  }
+            });
+        });
+        
     });
 });
 

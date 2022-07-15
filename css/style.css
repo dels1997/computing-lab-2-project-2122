@@ -25,6 +25,14 @@ form {
     transition: 500ms;
 }
 
+.field-custom {
+    width: 100%;
+    position: relative;
+    border-bottom: 2px dashed #afafaf;
+    margin: 4rem auto 1rem;
+    transition: 500ms;
+}
+
 .label1 {
     color: var(--text-color);
     font-size: 1.2rem;
@@ -36,6 +44,22 @@ form {
 }
 
 .input1 {
+    outline: none;
+    border: none;
+    overflow: hidden;
+    margin: 0;
+    width: 100%;
+    padding: 0.25rem 0;
+    background: none;
+    color: white;
+    font-size: 1.2rem;
+    /* font-weight: bold; */
+    transition: border 500ms;
+    display: block;
+    /* box-sizing: border-box; */
+}
+
+.input-custom {
     outline: none;
     border: none;
     overflow: hidden;
@@ -65,11 +89,34 @@ form {
     top: 2px;
 }
 
+.field-custom::after {
+    content: "";
+    position: relative;
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: #A9DF7A;
+    transform: scaleX(0);
+    transform-origin: 0%;
+    opacity: 0;
+    transition: all 500ms ease;
+    top: 2px;
+}
+
 .field:focus-within {
     border-color: transparent;
 }
 
+.field-custom:focus-within {
+    border-color: transparent;
+}
+
 .field:focus-within::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+.field-custom:focus-within::after {
     transform: scaleX(1);
     opacity: 1;
 }
@@ -83,19 +130,21 @@ form {
     transition: transform 400ms;
 }
 
-.field:focus-within .label1 {
-    transform: scale(0.8) translateY(-5rem);
-    opacity: 1;
-}
-
 .label-custom {
+    /* z-index: 5; */
     position: absolute;
+    bottom: 0.25rem;
     transform: translateY(-2rem);
     transform-origin: 0%;
     transition: transform 400ms;
 }
 
-.field:focus-within .label-custom {
+.field:focus-within .label1 {
+    transform: scale(0.8) translateY(-5rem);
+    opacity: 1;
+}
+
+.field-custom:focus-within .label-custom {
     transform: scale(0.8) translateY(-5rem);
     opacity: 1;
 }
@@ -152,6 +201,7 @@ main {
     position: fixed;
     background-color: var(--bg-primary);
     transition: 200ms ease;
+    z-index: 20;
 }
 
 .navbar-nav {
@@ -342,6 +392,21 @@ input[type="submit"]:hover{
 }
 
 .product-info {
+    border:solid 2px #fff;
+    background: transparent;
+    color: #fff !important;
+    margin: 0 auto;
+    border-radius: 0px;
+    text-decoration: none;
+    padding: 18px 24px;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif; font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.comment-area {
     border:solid 2px #fff;
     background: transparent;
     color: #fff !important;
