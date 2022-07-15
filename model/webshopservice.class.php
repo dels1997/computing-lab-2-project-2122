@@ -180,15 +180,15 @@ class WebshopService {
         $st = $db->prepare('SELECT * FROM products WHERE id=:id_product');
         $st->execute(['id_product' => $id_product]);
         $row = $st->fetch();
-
-        if($row['number_available'] > 0)
+        
+        if((int)$row['number_available'] > 0)
         {
             $st = $db->prepare('INSERT INTO sales(id_product, id_user) VALUES (:id_product, :id_user)');
             $st->execute(['id_product' => $id_product, 'id_user' => $id_user]);
+            $st = $db->prepare('UPDATE products SET number_available = number_available - 1 WHERE id=:id_product');
+            return $st->execute(['id_product' => $id_product]);
         }
-
-        $st = $db->prepare('UPDATE products SET number_available = number_available - 1 WHERE id=:id_product');
-        return $st->execute(['id_product' => $id_product]);
+        return false;
     }
 
     public static function canIBuyIt($my_id, $id_product)

@@ -196,7 +196,7 @@ function run() {
                 }
             }
         }
-        if(((co2_times.includes(m * 60 + s) && ms === 0) || s === 0) && (Math.abs(m * 60 + s - co2_times[co2_times_length - 1]) > 5))
+        if(((co2_times.includes(m * 60 + s) && ms === 0) || s === 0) && (Math.abs(m * 60 + s - co2_times[co2_times_length - 1]) > 2))
         {
             if(pozicija_timera % 2 === 0)
             {
@@ -231,7 +231,9 @@ function finish_and_save_training(duration, type)
         success: function( json ) {
             $('#notification').html('');
             stopwatchEL.textContent = getTimer();
-            console.log(json['val']);
+            // console.log(json['val']);
+            $('#o2-btn').on('click', show_o2_table);
+            $('#co2-btn').on('click', show_co2_table);
             if(json['val'])
             {
                 $("#notification").fadeIn("slow").append('Training saved successfully!');

@@ -547,15 +547,25 @@ class FreeDivingService
 
         $count = $del->rowCount();
 
-        $st = $db->prepare('DELETE FROM products WHERE id_user=:id');
-
-        $st->execute(['id' => $id]);
-
         $st = $db->prepare('DELETE FROM tables WHERE id_user=:id');
 
         $st->execute(['id' => $id]);
 
         $st = $db->prepare('DELETE FROM trainings WHERE id_user=:id');
+
+        $st->execute(['id' => $id]);
+
+        $st1 = $db->prepare('SELECT * FROM products WHERE id_user=:id');
+        $st2 = $db->prepare('DELETE FROM sales WHERE id_product=:id_product');
+
+        $st1->execute(['id' => $id]);
+
+        while($row1 = $st1->fetch())
+        {
+            $st2->execute(['id_product' => $row1['id']]);
+        }
+
+        $st = $db->prepare('DELETE FROM products WHERE id_user=:id');
 
         $st->execute(['id' => $id]);
 
