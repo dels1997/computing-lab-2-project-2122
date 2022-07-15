@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . '/_header.php'; ?>
 
-<div class="okolina" style="width: 500px;">
+<div class="okolina" id="okolina" style="width: 500px;">
     <div class="two-button-frame" style="float: left; display: block; width: max-content; margin-bottom: 0.5rem;">
         <button name="all-btn" id="all-btn" class="btn btn-big btn-white">All products</button></br>
         <button name="my-btn" id="my-btn" class="btn btn-big btn-white">My products</button></br>
@@ -17,7 +17,7 @@
         echo '<thead><th>Name</th><th>Description</th><th>Price</th><th>Owner</th><th>Quantity</th><th>Purchase</th></thead>';
         foreach($allProductsInfo as $productInfo)
         {
-            echo '<tr>';
+            echo '<tr class="product" id="product-row-' . $productInfo[7] . '">';
             echo '<td>' .  $productInfo[0] . '</td><td>' . $productInfo[1] . '</td><td>' . $productInfo[2] . '</td><td>' . $productInfo[3] . '</td><td>' . $productInfo[6] . '</td>';
             if($productInfo[5])
                 echo '<td><button id="product-' . $productInfo[4] . '" class="buy-btn btn btn-white">Buy!</button>';
@@ -31,7 +31,7 @@
         echo '<thead><th>Name</th><th>Description</th><th>Price</th><th>Quantity</th></thead>';
         foreach($myProductsInfo as $productInfo)
         {
-            echo '<tr>';
+            echo '<tr class="product" id="product-row-' . $productInfo[4] . '">';
             echo '<td>' .  $productInfo[0] . '</td><td>' . $productInfo[1] . '</td><td>' . $productInfo[2] . '</td><td>' . $productInfo[3] . '</td>';
             echo '</tr>';
         }
@@ -41,8 +41,8 @@
         echo '<thead><th>Name</th><th>Description</th><th>Price</th><th>Quantity</th></thead>';
         foreach($boughtProductsInfo as $productInfo)
         {
-            echo '<tr>';
-            echo '<td>' .  $productInfo[0] . '</td><td>' . $productInfo[1] . '</td><td>' . $productInfo[2] . '</td><td>' . $productInfo[3] . '</td>';
+            echo '<tr class="product" id="product-row-' . $productInfo[4] . '">';
+            echo '<td>'  . $productInfo[0] . '</td><td>' . $productInfo[1] . '</td><td>' . $productInfo[2] . '</td><td>' . $productInfo[3] . '</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -99,6 +99,68 @@ $(document).ready(function() {
             complete: function( xhr, status ) {  }
         });
     });
+
+    $('.product').on('click', function() {
+        id_product = $(this).attr('id').split('-')[2];
+
+        $.ajax(
+        {
+            url: "model/product_info_server.php",
+            data:
+            {
+                id_product: id_product
+                // ,
+                // username: $('#u').html()
+            },
+            type: "GET",
+            dataType: "json", // očekivani povratni tip podatka
+            success: function( json ) {
+                $('.product-info').remove();
+                comments_and_ratings_array = json['comments_and_ratings'];
+                let new_element = $('<div class="product-info" style="float: left;" id="product-info-' + id_product + '">');
+
+                if(comments_and_ratings_array.length === 0)
+                {
+                    new_element.append($('<p>No comments yet!</p>'));
+                }
+                else
+                {
+                    new_element.append($('<p>Comments:</p>'));
+                    for(let i = 0; i < comments_and_ratings_array.length; ++i)
+                    {
+                        new_element.append($('<p>' + comments_and_ratings_array[i][0] + '</p><p>' + comments_and_ratings_array[i][1] + '</p>'));
+                    }
+                    rating = json['rating'];
+                    new_element.append($('<p>Rating: ' + rating + '</p>'));
+                }
+                $('#okolina').append(new_element);
+                // let product_row = $('#product-' + id_product).parent().parent().children();
+                // product_row.eq(4).html(json['quantity']);
+                // $('#notification').html('');
+
+                // if(json['val'])
+                // {
+                //     $('#product-' + id_product).parent().html('');
+                //     $('#bought-products').append($('<tr><td>' +  product_row.eq(0).html() + '</td><td>' +  product_row.eq(1).html() + '</td><td>' + product_row.eq(2).html() + '</td><td>' + product_row.eq(3).html() + '</td></tr>'));
+                //     $("#notification").fadeIn("slow").append('Product bought successfully!');
+                //     $("#notification").click(function() {
+                //         $("#notification").fadeOut("slow");
+                //         $('#notification').html('');
+                //     });
+                // }
+                // else
+                // {
+                //     $("#notification").fadeIn("slow").append('Product NOT bought!');
+                //     $("#notification").click(function() {
+                //         $("#notification").fadeOut("slow");
+                //         $('#notification').html('');
+                //     });
+                // }
+            },
+            error: function( xhr, status, errorThrown ) { console.log(errorThrown); },
+            complete: function( xhr, status ) {  }
+        });
+    });
 });
 
 function show_all()
@@ -106,18 +168,21 @@ function show_all()
     $('#all-products').css('display', 'block');
     $('#my-products').css('display', 'none');
     $('#bought-products').css('display', 'none');
+    $('.product-info').remove();
 }
 function show_my()
 {
     $('#all-products').css('display', 'none');
     $('#my-products').css('display', 'block');
     $('#bought-products').css('display', 'none');
+    $('.product-info').remove();
 }
 function show_bought()
 {
     $('#all-products').css('display', 'none');
     $('#my-products').css('display', 'none');
     $('#bought-products').css('display', 'block');
+    $('.product-info').remove();
 }
 </script>
 <?php require_once __DIR__ . '/_footer.php'; ?>

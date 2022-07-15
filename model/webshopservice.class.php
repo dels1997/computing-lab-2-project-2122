@@ -70,7 +70,7 @@ class WebshopService {
         while ($row = $st->fetch())
         {
             $owner = (FreeDivingService::getUserByID($row['id_user']))->username;
-            $products[] = [$row['name'], $row['description'], $row['price'], $owner, $row['id'], WebShopService::canIBuyIt($user->id, $row['id']), $row['number_available']];
+            $products[] = [$row['name'], $row['description'], $row['price'], $owner, $row['id'], WebShopService::canIBuyIt($user->id, $row['id']), $row['number_available'], $row['id']];
         }
         return $products;
     }
@@ -85,7 +85,7 @@ class WebshopService {
 
         while ($row = $st->fetch())
         {
-            $products[] = [$row['name'], $row['description'], $row['price'], $row['number_available']];
+            $products[] = [$row['name'], $row['description'], $row['price'], $row['number_available'], $row['id']];
         }
         return $products;
     }
@@ -104,7 +104,7 @@ class WebshopService {
         {
             $st2->execute(['id_product' => $row['id_product']]);
             $row2 = $st2->fetch();
-            $products[] = [$row2['name'], $row2['description'], $row2['price'], $row2['number_available']];
+            $products[] = [$row2['name'], $row2['description'], $row2['price'], $row2['number_available'], $row['id']];
         }
         return $products;
     }
@@ -118,6 +118,43 @@ class WebshopService {
         if($row = $st->fetch())
             return $row['number_available'];
         else return 0;
+    }
+
+    public static function getCommentsAndRatingsByProductID($id_product)
+    {
+        $db = DB::getConnection();
+        $st = $db->prepare('SELECT * FROM sales WHERE id=:id_product');
+        $st->execute(['id_product' => $id_product]);
+
+        $comment_and_ratings = [];
+
+        while($row = $st->fetch())
+            if($row['comment'] !== null)
+                $comment_and_ratings[] = [$row['comment'], $row['rating']];
+
+        return $comment_and_ratings;
+    }
+
+    public static function getRatingByProductID($id_product)
+    {
+        $total_amount = 0;
+        $total_number = 0;
+        $db = DB::getConnection();
+        $st = $db->prepare('SELECT * FROM sales WHERE id=:id_product');
+        $st->execute(['id_product' => $id_product]);
+
+        $ratings = [];
+
+        while($row = $st->fetch())
+            if($row['rating'] !== null)
+            {
+                $total_amount = $total_amount + (int)$row['rating'];
+                ++$total_number;
+            }
+        
+        if($total_number === 0)
+            return 0;
+        return round($total_amount / $total_number, 2);
     }
 
     public static function buyProduct($id_user, $id_product)

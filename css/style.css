@@ -341,6 +341,21 @@ input[type="submit"]:hover{
     width: 50%;
 }
 
+.product-info {
+    border:solid 2px #fff;
+    background: transparent;
+    color: #fff !important;
+    margin: 0 auto;
+    border-radius: 0px;
+    text-decoration: none;
+    padding: 18px 24px;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif; font-weight: bold;
+    letter-spacing: 3px;
+}
+
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
