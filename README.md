@@ -1,2 +1,2 @@
-# rp2-projekt-2122
+# computing-lab-2-project-2122
  
